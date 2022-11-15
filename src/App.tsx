@@ -1,12 +1,5 @@
-import { Tractor, Spacer, Typography } from '@aircall/tractor';
+import Navigation from './navigation';
 
-const App = () => (
-    <Tractor injectStyle>
-        <Spacer space="s">
-            <Typography variant="displayM">Hello</Typography>
-            <Typography variant="displayL">World</Typography>
-        </Spacer>
-    </Tractor>
-);
+const App = () => <Navigation />;
 
 export default App;
