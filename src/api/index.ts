@@ -1,5 +1,5 @@
-import { getAccessToken, getRefreshToken, setAccessToken, setRefreshToken, updateTokens } from "../storage";
-import { API_URL, ARCHIVE_ENDPOINT, CALLS_ENDPOINT, ERROR_NOT_LOGGED_CODE, ERROR_NOT_LOGGED_MESSAGE, LOGIN_ENDPOINT, ME_ENDPOINT, REFRESH_TOKEN_ENDPOINT } from "./constants";
+import { getAccessToken, getRefreshToken, updateTokens } from "../storage";
+import { API_URL, ARCHIVE_ENDPOINT, CALLS_ENDPOINT, ERROR_NOT_LOGGED_CODE, ERROR_NOT_LOGGED_MESSAGE, ERROR_REFRESH_TOKEN_CODE, ERROR_REFRESH_TOKEN_MESSAGE, LOGIN_ENDPOINT, ME_ENDPOINT, REFRESH_TOKEN_ENDPOINT } from "./constants";
 import { Call, IAuthResponse, ICallsResponse, User } from "./types";
 
 const request = async <Parameters, Response>(
@@ -20,15 +20,19 @@ const request = async <Parameters, Response>(
     const shouldRefetchToken = response.status === 401;
 
     if (!response.ok && url.indexOf(REFRESH_TOKEN_ENDPOINT) > -1) {
-        throw new Error(ERROR_NOT_LOGGED_MESSAGE, { cause: ERROR_NOT_LOGGED_CODE })
+        throw new Error(ERROR_NOT_LOGGED_MESSAGE, { cause: ERROR_NOT_LOGGED_CODE });
     }
 
-    if (shouldRefetchToken && refresh) {
-        const { access_token, refresh_token } = await refreshToken();
+    if (shouldRefetchToken && !refresh) {
+        try {
+            const { access_token, refresh_token } = await refreshToken();
 
-        updateTokens(access_token, refresh_token)
+            updateTokens(access_token, refresh_token)
 
-        return await request(url, method, parameters, false);
+            return await request(url, method, parameters, refresh);
+        } catch (e) {
+            throw new Error(ERROR_REFRESH_TOKEN_MESSAGE, { cause: ERROR_REFRESH_TOKEN_CODE });
+        }
     }
 
     return await response.json() as Response;
@@ -58,9 +62,9 @@ const post = async <Parameters, Response>(url: string, body?: Parameters, refres
     return request<Parameters, Response>(url, 'POST', body, refresh);
 }
 
-const refreshToken = async (): Promise<IAuthResponse> => post<null, IAuthResponse>(`${API_URL}${REFRESH_TOKEN_ENDPOINT}`, null, true);
+export const refreshToken = async (refresh: boolean = true): Promise<IAuthResponse> => post<null, IAuthResponse>(`${API_URL}${REFRESH_TOKEN_ENDPOINT}`, null, refresh);
 
-export const isLogged = async (id: number): Promise<boolean> => {
+export const isLogged = async (): Promise<boolean> => {
     return get<boolean>(`${API_URL}${ME_ENDPOINT}`);
 }
 
