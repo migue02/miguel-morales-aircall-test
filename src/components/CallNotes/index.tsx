@@ -12,7 +12,7 @@ const CallNotes: FC<ICallNotes> = ({ notes }) => {
             <Typography variant="heading">Notes</Typography>
             <Box>
                 <Accordion.Container defaultSelected={1}>
-                    {notes.map((note) => {
+                    {notes.map((note, index) => {
                         return (
                             <Accordion.Item id={note.id}>
                                 <Accordion.Header>
@@ -23,7 +23,7 @@ const CallNotes: FC<ICallNotes> = ({ notes }) => {
                                         cursor="pointer"
                                     >
                                         <Typography variant="subheading">
-                                            Note 1
+                                            {`Note ${index + 1}`}
                                         </Typography>
                                     </Box>
                                 </Accordion.Header>

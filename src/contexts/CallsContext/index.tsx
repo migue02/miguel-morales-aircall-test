@@ -4,11 +4,11 @@ import { createCtx } from '..';
 import { getCalls } from '../../api';
 import { ERROR_NOT_LOGGED_CODE, PAGE_SIZE } from '../../api/constants';
 import { Call } from '../../api/types';
-import { ICallProvider, CallType } from './types';
+import { ICallsProvider, CallType } from './types';
 
-export const [useCallContext, CallContext] = createCtx<CallType>();
+export const [useCallsContext, CallsContext] = createCtx<CallType>();
 
-export const CallProvider: FC<ICallProvider> = ({ children }) => {
+export const CallsProvider: FC<ICallsProvider> = ({ children }) => {
     const [calls, setCalls] = useState<Call[]>([]);
     const [currentPage, setCurentPage] = useState(1);
     const [pageSize, setPageSize] = useState(PAGE_SIZE);
@@ -48,7 +48,7 @@ export const CallProvider: FC<ICallProvider> = ({ children }) => {
     };
 
     return (
-        <CallContext.Provider
+        <CallsContext.Provider
             value={{
                 calls,
                 currentPage,
@@ -66,6 +66,6 @@ export const CallProvider: FC<ICallProvider> = ({ children }) => {
             }}
         >
             {children}
-        </CallContext.Provider>
+        </CallsContext.Provider>
     );
 };

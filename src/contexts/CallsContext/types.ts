@@ -11,6 +11,6 @@ export type CallType = {
     loading: boolean;
 };
 
-export interface ICallProvider {
+export interface ICallsProvider {
     children: ReactNode;
 }

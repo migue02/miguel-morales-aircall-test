@@ -7,7 +7,7 @@ import {
 } from '@aircall/tractor';
 import { useNavigate } from 'react-router-dom';
 import CallComponent from '../../components/CallComponent';
-import { useCallContext } from '../../contexts/CallContext';
+import { useCallsContext } from '../../contexts/CallsContext';
 import { getCallWidth } from '../../utils';
 
 const Calls = () => {
@@ -19,7 +19,7 @@ const Calls = () => {
         totalCount,
         changePage,
         chagePageSize,
-    } = useCallContext();
+    } = useCallsContext();
     const navigate = useNavigate();
 
     const goToDetail = (id: string) => {
