@@ -18,14 +18,19 @@ const CallDetail: FC<ICallDetail> = ({ id }) => {
 
     useEffect(() => {
         if (id) {
-            getCall(id)
-                .then((call) => {
+            const fetchCall = async () => {
+                try {
+                    const call = await getCall(id);
                     setCall(call);
-                })
-                .catch((error: Error) => {
-                    if (error?.cause === ERROR_NOT_LOGGED_CODE)
+                } catch (error: unknown) {
+                    if (
+                        error instanceof Error &&
+                        error?.cause === ERROR_NOT_LOGGED_CODE
+                    )
                         navigate('/login');
-                });
+                }
+            };
+            void fetchCall();
         }
     }, [id, navigate]);
 

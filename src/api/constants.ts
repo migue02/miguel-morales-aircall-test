@@ -11,5 +11,4 @@ export const ARCHIVE_ENDPOINT = '/archive';
 export const ERROR_NOT_LOGGED_CODE = 'NOT_LOGGED';
 export const ERROR_NOT_LOGGED_MESSAGE = 'User not logged, please login';
 
-export const ERROR_REFRESH_TOKEN_CODE = 'REFRESH_TOKEN';
-export const ERROR_REFRESH_TOKEN_MESSAGE = 'Error when refreshing token';
+export const PAGE_SIZE = 10;

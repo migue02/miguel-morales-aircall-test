@@ -1,5 +1,5 @@
 import { getAccessToken, getRefreshToken, updateTokens } from "../storage";
-import { API_URL, ARCHIVE_ENDPOINT, CALLS_ENDPOINT, ERROR_NOT_LOGGED_CODE, ERROR_NOT_LOGGED_MESSAGE, ERROR_REFRESH_TOKEN_CODE, ERROR_REFRESH_TOKEN_MESSAGE, LOGIN_ENDPOINT, ME_ENDPOINT, REFRESH_TOKEN_ENDPOINT } from "./constants";
+import { API_URL, ARCHIVE_ENDPOINT, CALLS_ENDPOINT, ERROR_NOT_LOGGED_CODE, ERROR_NOT_LOGGED_MESSAGE, LOGIN_ENDPOINT, ME_ENDPOINT, PAGE_SIZE, REFRESH_TOKEN_ENDPOINT } from "./constants";
 import { Call, IAuthResponse, ICallsResponse, User } from "./types";
 
 const request = async <Parameters, Response>(
@@ -72,7 +72,7 @@ export const login = async (username: string, password: string): Promise<IAuthRe
     return response;
 }
 
-export const getCalls = async (offset: number = 0, limit: number = 10): Promise<ICallsResponse> => {
+export const getCalls = async (offset: number = 0, limit: number = PAGE_SIZE): Promise<ICallsResponse> => {
     return get<ICallsResponse>(`${API_URL}${CALLS_ENDPOINT}?offset=${offset}&limit=${limit}`);
 }
 
