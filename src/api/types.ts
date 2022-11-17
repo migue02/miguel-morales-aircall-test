@@ -8,14 +8,17 @@ export type Note = {
     content: string;
 }
 
+export type CallType = 'missed' | 'answered' | 'voicemail';
+export type CallDirection = 'inbound' | 'outbound';
+
 export type Call = {
     id: string;
     duration: number;
     is_archived: boolean;
     from: string;
     to: string;
-    direction: string;
-    call_type: string;
+    direction: CallDirection;
+    call_type: CallType;
     via: string;
     created_at: string;
     notes: Note[];
