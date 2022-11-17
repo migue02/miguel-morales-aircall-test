@@ -12,5 +12,5 @@ export const createCtx = <A extends {} | null>() => {
             throw new Error('useCtx must be inside a Provider with a value');
         return c;
     }
-    return [useCtx, ctx] as const; // 'as const' makes TypeScript infer a tuple
+    return [useCtx, ctx] as const;
 }
