@@ -21,7 +21,9 @@ const CallHeader: FC<IProps> = ({ call, goToDetail, archive, width }) => {
         <Spacer space="s" direction="vertical" width={width}>
             <Flex>
                 <Spacer space="xs">
-                    <CallIcon icon={call.call_type} />
+                    <CallIcon
+                        icon={call.is_archived ? 'archive' : call.call_type}
+                    />
                     <Typography variant="heading">
                         {call.direction === 'inbound' ? call.from : call.to}
                     </Typography>
@@ -44,7 +46,7 @@ const CallHeader: FC<IProps> = ({ call, goToDetail, archive, width }) => {
                             mode="outline"
                             onClick={() => archive(call.id)}
                         >
-                            Archive
+                            {call.is_archived ? 'Restore' : 'Archive'}
                         </Button>
                         {goToDetail && (
                             <Button

@@ -12,7 +12,7 @@ import { getCallWidth } from '../../utils';
 
 const Calls = () => {
     const {
-        loading,
+        loadingCalls,
         calls,
         currentPage,
         pageSize,
@@ -21,6 +21,7 @@ const Calls = () => {
         chagePageSize,
         archiveCall,
     } = useCallsContext();
+
     const navigate = useNavigate();
 
     const goToDetail = (id: string) => {
@@ -44,7 +45,7 @@ const Calls = () => {
                     alignItems="center"
                     justifyContent="center"
                 >
-                    {!loading ? (
+                    {!loadingCalls ? (
                         calls.map((call, idx) => (
                             <CallComponent
                                 key={idx}

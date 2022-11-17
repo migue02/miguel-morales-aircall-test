@@ -8,7 +8,7 @@ export type CallType = {
     pageSize: number;
     chagePageSize: (newPageNumber: number) => void;
     totalCount: number;
-    loading: boolean;
+    loadingCalls: boolean;
     archiveCall: (id: string) => Promise<boolean>;
     getCall: (id: string) => Promise<Call>;
 };

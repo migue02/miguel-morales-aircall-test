@@ -18,6 +18,7 @@ const CallComponent: FC<IProps> = ({ call, goToDetail, archive }) => {
             borderLeftWidth="5px"
             borderLeftStyle="solid"
             width={getCallWidth()}
+            bg={call.is_archived ? 'grey.light' : 'white'}
             borderColor={getCallBorderColor(call.call_type)}
         >
             <CallHeader
