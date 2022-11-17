@@ -19,14 +19,13 @@ const Calls = () => {
         totalCount,
         changePage,
         chagePageSize,
+        archiveCall,
     } = useCallsContext();
     const navigate = useNavigate();
 
     const goToDetail = (id: string) => {
         navigate(`/${id}`);
     };
-
-    const archive = (id: string) => {};
 
     return (
         <Flex height="90%" flexDirection="column" mt="40px">
@@ -51,7 +50,7 @@ const Calls = () => {
                                 key={idx}
                                 call={call}
                                 goToDetail={goToDetail}
-                                archive={archive}
+                                archive={archiveCall}
                             />
                         ))
                     ) : (

@@ -1,7 +1,7 @@
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createCtx } from '..';
-import { getCalls } from '../../api';
+import { archiveCall, getCall, getCalls } from '../../api';
 import { ERROR_NOT_LOGGED_CODE, PAGE_SIZE } from '../../api/constants';
 import { Call } from '../../api/types';
 import { ICallsProvider, CallType } from './types';
@@ -47,6 +47,30 @@ export const CallsProvider: FC<ICallsProvider> = ({ children }) => {
         setPageSize(newPageSize);
     };
 
+    const fetchCall = async (id: string): Promise<Call> => {
+        try {
+            return await getCall(id);
+        } catch (error: unknown) {
+            const err = error instanceof Error ? error : new Error();
+            throw err;
+        }
+    };
+
+    const archive = async (id: string): Promise<boolean> => {
+        setLoading(true);
+        try {
+            const result = await archiveCall(id);
+
+            setLoading(false);
+
+            return !!result;
+        } catch (e) {
+            setLoading(false);
+
+            return false;
+        }
+    };
+
     return (
         <CallsContext.Provider
             value={{
@@ -63,6 +87,8 @@ export const CallsProvider: FC<ICallsProvider> = ({ children }) => {
                     (newPageSize) => chagePageSize(newPageSize),
                     []
                 ),
+                archiveCall: useCallback((id) => archive(id), []),
+                getCall: useCallback((id) => fetchCall(id), []),
             }}
         >
             {children}
