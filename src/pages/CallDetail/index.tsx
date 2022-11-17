@@ -1,9 +1,79 @@
+import { Button, Divider, Flex, Skeleton, Spacer } from '@aircall/tractor';
+import { FC, useEffect, useState } from 'react';
 import { Call } from '../../api/types';
+import { getCallBorderColor, getCallWidth } from '../../utils';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getCall } from '../../api';
+import { ERROR_NOT_LOGGED_CODE } from '../../api/constants';
+import CallHeader from '../../components/CallHeader';
+import CallNotes from '../../components/CallNotes';
 
-const CallDetail = () => {
-    return <div>made by</div>;
+interface ICallDetail {
+    id?: string;
+}
 
-    // {"id":"7876e2eb-1a50-4a7e-afb5-2936cbe6e814","duration":60816,"is_archived":false,"from":"+33193545889","to":"+33189394635","direction":"inbound","call_type":"answered","via":"+33118842251","created_at":"2022-11-10T19:29:04.158Z","notes":[{"id":"37f0d33d-4b7a-4631-af34-dbfb73838510","content":"Iste accusamus consectetur cupiditate sed placeat libero."}]}
+const CallDetail: FC<ICallDetail> = ({ id }) => {
+    const [call, setCall] = useState<Call>();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (id) {
+            getCall(id)
+                .then((call) => {
+                    setCall(call);
+                })
+                .catch((error: Error) => {
+                    if (error?.cause === ERROR_NOT_LOGGED_CODE)
+                        navigate('/login');
+                });
+        }
+    }, [id, navigate]);
+
+    const getHeight = () => 600;
+
+    const archive = (id: string) => {};
+    const goBack = () => {
+        navigate(-1);
+    };
+
+    return !call ? (
+        <Skeleton
+            width={getCallWidth()}
+            height={getHeight()}
+            animation="shimmer"
+        />
+    ) : (
+        <Flex
+            px="32px"
+            py="16px"
+            width={getCallWidth()}
+            height={getHeight()}
+            flexDirection="column"
+            borderColor={getCallBorderColor(call.call_type)}
+        >
+            <Spacer space="s" direction="vertical">
+                <Button mode="link" onClick={() => goBack()}>
+                    Go Back
+                </Button>
+                <CallHeader
+                    call={call}
+                    width={getCallWidth(-64)}
+                    archive={archive}
+                />
+                {call.notes.length > 0 && (
+                    <Spacer space="s" width="100%" direction="vertical">
+                        <Divider orientation="horizontal" />
+                        <CallNotes notes={call.notes} />
+                    </Spacer>
+                )}
+            </Spacer>
+        </Flex>
+    );
 };
 
-export default CallDetail;
+const WrappedCallDetail = () => {
+    const { id } = useParams<{ id: string }>();
+    return <CallDetail id={id} />;
+};
+
+export default WrappedCallDetail;

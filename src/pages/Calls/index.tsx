@@ -20,6 +20,12 @@ const Calls = () => {
             });
     }, [navigate]);
 
+    const goToDetail = (id: string) => {
+        navigate(`/${id}`);
+    };
+
+    const archive = (id: string) => {};
+
     return (
         <Flex height="90%" flexDirection="column" mt="40px">
             <Typography variant="displayL" textAlign="center">
@@ -38,7 +44,12 @@ const Calls = () => {
                     justifyContent="center"
                 >
                     {calls.map((call, idx) => (
-                        <CallComponent key={idx} call={call} />
+                        <CallComponent
+                            key={idx}
+                            call={call}
+                            goToDetail={goToDetail}
+                            archive={archive}
+                        />
                     ))}
                 </Spacer>
             </Flex>

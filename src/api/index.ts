@@ -76,10 +76,10 @@ export const getCalls = async (offset: number = 0, limit: number = 10): Promise<
     return get<ICallsResponse>(`${API_URL}${CALLS_ENDPOINT}?offset=${offset}&limit=${limit}`);
 }
 
-export const getCall = async (id: number): Promise<Call> => {
+export const getCall = async (id: string): Promise<Call> => {
     return get<Call>(`${API_URL}${CALLS_ENDPOINT}/${id}`);
 }
 
-export const archiveCall = async (id: number): Promise<Call> => {
+export const archiveCall = async (id: string): Promise<Call> => {
     return put<Call>(`${API_URL}${CALLS_ENDPOINT}/${id}${ARCHIVE_ENDPOINT}`);
 }
