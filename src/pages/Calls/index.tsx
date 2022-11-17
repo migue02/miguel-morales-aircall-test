@@ -1,24 +1,26 @@
-import { Flex, Spacer, Typography } from '@aircall/tractor';
-import { useEffect, useState } from 'react';
+import {
+    Flex,
+    Pagination,
+    Skeleton,
+    Spacer,
+    Typography,
+} from '@aircall/tractor';
 import { useNavigate } from 'react-router-dom';
-import { getCalls } from '../../api';
-import { ERROR_NOT_LOGGED_CODE } from '../../api/constants';
-import { Call } from '../../api/types';
 import CallComponent from '../../components/CallComponent';
+import { useCallsContext } from '../../contexts/CallsContext';
+import { getCallWidth } from '../../utils';
 
 const Calls = () => {
-    const [calls, setCalls] = useState<Call[]>([]);
+    const {
+        loading,
+        calls,
+        currentPage,
+        pageSize,
+        totalCount,
+        changePage,
+        chagePageSize,
+    } = useCallsContext();
     const navigate = useNavigate();
-
-    useEffect(() => {
-        getCalls()
-            .then((calls) => {
-                setCalls(calls.nodes);
-            })
-            .catch((error: Error) => {
-                if (error?.cause === ERROR_NOT_LOGGED_CODE) navigate('/login');
-            });
-    }, [navigate]);
 
     const goToDetail = (id: string) => {
         navigate(`/${id}`);
@@ -43,16 +45,39 @@ const Calls = () => {
                     alignItems="center"
                     justifyContent="center"
                 >
-                    {calls.map((call, idx) => (
-                        <CallComponent
-                            key={idx}
-                            call={call}
-                            goToDetail={goToDetail}
-                            archive={archive}
-                        />
-                    ))}
+                    {!loading ? (
+                        calls.map((call, idx) => (
+                            <CallComponent
+                                key={idx}
+                                call={call}
+                                goToDetail={goToDetail}
+                                archive={archive}
+                            />
+                        ))
+                    ) : (
+                        <Spacer
+                            space="s"
+                            direction="vertical"
+                            justifyContent="center"
+                        >
+                            {Array.from(Array(10)).map((_, index) => (
+                                <Skeleton
+                                    key={index}
+                                    height="48px"
+                                    width={getCallWidth()}
+                                />
+                            ))}
+                        </Spacer>
+                    )}
                 </Spacer>
             </Flex>
+            <Pagination
+                activePage={currentPage}
+                onPageChange={changePage}
+                onPageSizeChange={chagePageSize}
+                pageSize={pageSize}
+                recordsTotalCount={totalCount}
+            />
         </Flex>
     );
 };

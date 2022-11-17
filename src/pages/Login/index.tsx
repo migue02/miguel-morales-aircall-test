@@ -27,7 +27,6 @@ const Login = () => {
             await login(username, password);
             navigate('/');
         } catch (error) {
-            console.log('Wrong password');
             setValidationStatus('error');
         }
     };
