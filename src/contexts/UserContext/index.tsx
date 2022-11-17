@@ -9,16 +9,19 @@ export const [useUserContext, UserContext] = createCtx<UserType>();
 export const UserProvider: FC<IUserProvider> = ({ children }) => {
     const [username, setUserName] = useState('');
     const [loading, setLoading] = useState(false);
+    const [loggedIn, setLoggedIn] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchIsLogged = async () => {
             try {
                 const logged = await isLogged();
+                setLoggedIn(logged);
                 if (!logged) {
                     navigate('/login');
                 }
             } catch (e) {
+                setLoggedIn(false);
                 navigate('/login');
             }
         };
@@ -34,20 +37,11 @@ export const UserProvider: FC<IUserProvider> = ({ children }) => {
         try {
             await login(username, password);
             setUserName(username);
+            setLoggedIn(true);
             return true;
         } catch (error) {
             setUserName('');
-            return false;
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const isLoggedIn = async (): Promise<boolean> => {
-        setLoading(true);
-        try {
-            return await isLogged();
-        } catch (error) {
+            setLoggedIn(false);
             return false;
         } finally {
             setLoading(false);
@@ -67,12 +61,12 @@ export const UserProvider: FC<IUserProvider> = ({ children }) => {
         <UserContext.Provider
             value={{
                 username,
+                loggedIn,
                 loading,
                 login: useCallback(
                     (username, password) => doLogin(username, password),
                     []
                 ),
-                isLoggedIn: useCallback(() => isLoggedIn(), []),
                 refreshToken: useCallback(() => doRefreshToken(), []),
             }}
         >
