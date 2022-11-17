@@ -14,7 +14,7 @@ const CallNotes: FC<ICallNotes> = ({ notes }) => {
                 <Accordion.Container defaultSelected={1}>
                     {notes.map((note, index) => {
                         return (
-                            <Accordion.Item id={note.id}>
+                            <Accordion.Item key={note.id} id={note.id}>
                                 <Accordion.Header>
                                     <Box
                                         backgroundColor="#E8E8E6"

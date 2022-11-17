@@ -10,7 +10,6 @@ export type CallType = {
     totalCount: number;
     loadingCalls: boolean;
     archiveCall: (id: string) => Promise<boolean>;
-    getCall: (id: string) => Promise<Call>;
 };
 
 export interface ICallsProvider {

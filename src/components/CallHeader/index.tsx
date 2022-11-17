@@ -13,7 +13,7 @@ interface IProps {
         xl: string;
     };
     goToDetail?: (id: string) => void;
-    archive: (id: string) => void;
+    archive?: (id: string) => void;
 }
 
 const CallHeader: FC<IProps> = ({ call, goToDetail, archive, width }) => {
@@ -40,14 +40,16 @@ const CallHeader: FC<IProps> = ({ call, goToDetail, archive, width }) => {
                 </Typography>
                 <Flex alignItems="center">
                     <Spacer space="xs">
-                        <Button
-                            size="small"
-                            variant="warning"
-                            mode="outline"
-                            onClick={() => archive(call.id)}
-                        >
-                            {call.is_archived ? 'Restore' : 'Archive'}
-                        </Button>
+                        {archive && (
+                            <Button
+                                size="small"
+                                variant="warning"
+                                mode="outline"
+                                onClick={() => archive(call.id)}
+                            >
+                                {call.is_archived ? 'Restore' : 'Archive'}
+                            </Button>
+                        )}
                         {goToDetail && (
                             <Button
                                 size="small"

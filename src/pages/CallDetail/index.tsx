@@ -1,39 +1,18 @@
 import { Button, Divider, Flex, Skeleton, Spacer } from '@aircall/tractor';
-import { FC, useEffect, useState } from 'react';
-import { Call } from '../../api/types';
+import { FC } from 'react';
 import { getCallBorderColor, getCallWidth } from '../../utils';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ERROR_NOT_LOGGED_CODE } from '../../api/constants';
 import CallHeader from '../../components/CallHeader';
 import CallNotes from '../../components/CallNotes';
-import { useCallsContext } from '../../contexts/CallsContext';
+import useCall from '../../hooks/useCall';
 
 interface ICallDetail {
     id?: string;
 }
 
 const CallDetail: FC<ICallDetail> = ({ id }) => {
-    const [call, setCall] = useState<Call>();
     const navigate = useNavigate();
-    const { archiveCall, getCall } = useCallsContext();
-
-    useEffect(() => {
-        if (id) {
-            const fetchCall = async () => {
-                try {
-                    const call = await getCall(id);
-                    setCall(call);
-                } catch (error: unknown) {
-                    if (
-                        error instanceof Error &&
-                        error?.cause === ERROR_NOT_LOGGED_CODE
-                    )
-                        navigate('/login');
-                }
-            };
-            void fetchCall();
-        }
-    }, [id, navigate, getCall]);
+    const [call] = useCall(id);
 
     const getHeight = () => 600;
 
@@ -60,11 +39,7 @@ const CallDetail: FC<ICallDetail> = ({ id }) => {
                 <Button mode="link" onClick={() => goBack()}>
                     Go Back
                 </Button>
-                <CallHeader
-                    call={call}
-                    width={getCallWidth(-64)}
-                    archive={archiveCall}
-                />
+                <CallHeader call={call} width={getCallWidth(-64)} />
                 {call.notes.length > 0 && (
                     <Spacer space="s" width="100%" direction="vertical">
                         <Divider orientation="horizontal" />

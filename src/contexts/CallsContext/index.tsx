@@ -5,7 +5,7 @@ import { CHANNEL, UPDATE_CALL_EVENT } from '../../services/constants';
 import { getPusher } from '../../services/Pusher';
 import { useUserContext } from '../UserContext';
 import { getAccessToken } from '../../storage';
-import { archiveCall, getCall, getCalls } from '../../api';
+import { archiveCall, getCalls } from '../../api';
 import { ERROR_NOT_LOGGED_CODE, PAGE_SIZE } from '../../api/constants';
 import { Call } from '../../api/types';
 import { ICallsProvider, CallType } from './types';
@@ -49,9 +49,8 @@ export const CallsProvider: FC<ICallsProvider> = ({ children }) => {
             const channel = getPusher(getAccessToken()).subscribe(CHANNEL);
             channel.bind(UPDATE_CALL_EVENT, (data: Call) => {
                 if (data) {
-                    console.log('data', data);
-                    setCalls((prev) => {
-                        return prev.map((call) => {
+                    setCalls((oldCalls) => {
+                        return oldCalls.map((call) => {
                             if (call.id === data.id) {
                                 call.is_archived = data.is_archived;
                             }
@@ -70,15 +69,6 @@ export const CallsProvider: FC<ICallsProvider> = ({ children }) => {
 
     const chagePageSize = (newPageSize: number) => {
         setPageSize(newPageSize);
-    };
-
-    const fetchCall = async (id: string): Promise<Call> => {
-        try {
-            return await getCall(id);
-        } catch (error: unknown) {
-            const err = error instanceof Error ? error : new Error();
-            throw err;
-        }
     };
 
     const archive = async (id: string): Promise<boolean> => {
@@ -107,7 +97,6 @@ export const CallsProvider: FC<ICallsProvider> = ({ children }) => {
                     []
                 ),
                 archiveCall: useCallback((id) => archive(id), []),
-                getCall: useCallback((id) => fetchCall(id), []),
             }}
         >
             {children}
