@@ -3,10 +3,10 @@ import { FC, useEffect, useState } from 'react';
 import { Call } from '../../api/types';
 import { getCallBorderColor, getCallWidth } from '../../utils';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getCall } from '../../api';
 import { ERROR_NOT_LOGGED_CODE } from '../../api/constants';
 import CallHeader from '../../components/CallHeader';
 import CallNotes from '../../components/CallNotes';
+import { useCallsContext } from '../../contexts/CallsContext';
 
 interface ICallDetail {
     id?: string;
@@ -15,6 +15,7 @@ interface ICallDetail {
 const CallDetail: FC<ICallDetail> = ({ id }) => {
     const [call, setCall] = useState<Call>();
     const navigate = useNavigate();
+    const { archiveCall, getCall } = useCallsContext();
 
     useEffect(() => {
         if (id) {
@@ -32,11 +33,10 @@ const CallDetail: FC<ICallDetail> = ({ id }) => {
             };
             void fetchCall();
         }
-    }, [id, navigate]);
+    }, [id, navigate, getCall]);
 
     const getHeight = () => 600;
 
-    const archive = (id: string) => {};
     const goBack = () => {
         navigate(-1);
     };
@@ -63,7 +63,7 @@ const CallDetail: FC<ICallDetail> = ({ id }) => {
                 <CallHeader
                     call={call}
                     width={getCallWidth(-64)}
-                    archive={archive}
+                    archive={archiveCall}
                 />
                 {call.notes.length > 0 && (
                     <Spacer space="s" width="100%" direction="vertical">
