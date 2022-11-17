@@ -1,7 +1,11 @@
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createCtx } from '..';
-import { archiveCall, getCall, getCalls } from '../../api';
+import { CHANNEL, UPDATE_CALL_EVENT } from '../../services/constants';
+import { getPusher } from '../../services/Pusher';
+import { useUserContext } from '../UserContext';
+import { getAccessToken } from '../../storage';
+import { archiveCall, getCalls } from '../../api';
 import { ERROR_NOT_LOGGED_CODE, PAGE_SIZE } from '../../api/constants';
 import { Call } from '../../api/types';
 import { ICallsProvider, CallType } from './types';
@@ -13,11 +17,12 @@ export const CallsProvider: FC<ICallsProvider> = ({ children }) => {
     const [currentPage, setCurentPage] = useState(1);
     const [pageSize, setPageSize] = useState(PAGE_SIZE);
     const [totalCount, setTotalCount] = useState(0);
-    const [loading, setLoading] = useState(false);
+    const [loadingCalls, setLoadingCalls] = useState(false);
+    const { loggedIn } = useUserContext();
     const navigate = useNavigate();
 
     useEffect(() => {
-        setLoading(true);
+        setLoadingCalls(true);
         const fetchCalls = async () => {
             try {
                 const result = await getCalls(
@@ -26,9 +31,9 @@ export const CallsProvider: FC<ICallsProvider> = ({ children }) => {
                 );
                 setTotalCount(result.totalCount);
                 setCalls(result.nodes);
-                setLoading(false);
+                setLoadingCalls(false);
             } catch (error: unknown) {
-                setLoading(false);
+                setLoadingCalls(false);
                 if (
                     error instanceof Error &&
                     error?.cause === ERROR_NOT_LOGGED_CODE
@@ -39,6 +44,25 @@ export const CallsProvider: FC<ICallsProvider> = ({ children }) => {
         void fetchCalls();
     }, [navigate, currentPage, pageSize]);
 
+    useEffect(() => {
+        if (loggedIn) {
+            const channel = getPusher(getAccessToken()).subscribe(CHANNEL);
+            channel.bind(UPDATE_CALL_EVENT, (data: Call) => {
+                if (data) {
+                    setCalls((oldCalls) => {
+                        return oldCalls.map((call) => {
+                            if (call.id === data.id) {
+                                call.is_archived = data.is_archived;
+                            }
+                            return call;
+                        });
+                    });
+                }
+            });
+            return () => getPusher().unsubscribe(CHANNEL);
+        }
+    }, [loggedIn]);
+
     const changePage = (newPageNumber: number) => {
         setCurentPage(newPageNumber);
     };
@@ -47,26 +71,11 @@ export const CallsProvider: FC<ICallsProvider> = ({ children }) => {
         setPageSize(newPageSize);
     };
 
-    const fetchCall = async (id: string): Promise<Call> => {
-        try {
-            return await getCall(id);
-        } catch (error: unknown) {
-            const err = error instanceof Error ? error : new Error();
-            throw err;
-        }
-    };
-
     const archive = async (id: string): Promise<boolean> => {
-        setLoading(true);
         try {
             const result = await archiveCall(id);
-
-            setLoading(false);
-
             return !!result;
         } catch (e) {
-            setLoading(false);
-
             return false;
         }
     };
@@ -78,7 +87,7 @@ export const CallsProvider: FC<ICallsProvider> = ({ children }) => {
                 currentPage,
                 pageSize,
                 totalCount,
-                loading,
+                loadingCalls,
                 changePage: useCallback(
                     (newPageNumber) => changePage(newPageNumber),
                     []
@@ -88,7 +97,6 @@ export const CallsProvider: FC<ICallsProvider> = ({ children }) => {
                     []
                 ),
                 archiveCall: useCallback((id) => archive(id), []),
-                getCall: useCallback((id) => fetchCall(id), []),
             }}
         >
             {children}

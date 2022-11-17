@@ -1,5 +1,6 @@
 import {
     AnsweredOutboundFilled,
+    ArchiveFilled,
     InboundOutlined,
     MissedInboundFilled,
     OutboundOutlined,
@@ -9,7 +10,7 @@ import { FC } from 'react';
 import { CallDirection, CallType } from '../../api/types';
 
 interface ICallIcon {
-    icon: CallType | CallDirection;
+    icon: CallType | CallDirection | 'archive';
 }
 
 const CallIcon: FC<ICallIcon> = ({ icon }) => {
@@ -21,8 +22,10 @@ const CallIcon: FC<ICallIcon> = ({ icon }) => {
         <VoicemailOutlined />
     ) : icon === 'inbound' ? (
         <InboundOutlined />
-    ) : (
+    ) : icon === 'outbound' ? (
         <OutboundOutlined />
+    ) : (
+        <ArchiveFilled />
     );
 };
 

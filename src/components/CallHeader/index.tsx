@@ -13,7 +13,7 @@ interface IProps {
         xl: string;
     };
     goToDetail?: (id: string) => void;
-    archive: (id: string) => void;
+    archive?: (id: string) => void;
 }
 
 const CallHeader: FC<IProps> = ({ call, goToDetail, archive, width }) => {
@@ -21,7 +21,9 @@ const CallHeader: FC<IProps> = ({ call, goToDetail, archive, width }) => {
         <Spacer space="s" direction="vertical" width={width}>
             <Flex>
                 <Spacer space="xs">
-                    <CallIcon icon={call.call_type} />
+                    <CallIcon
+                        icon={call.is_archived ? 'archive' : call.call_type}
+                    />
                     <Typography variant="heading">
                         {call.direction === 'inbound' ? call.from : call.to}
                     </Typography>
@@ -38,14 +40,16 @@ const CallHeader: FC<IProps> = ({ call, goToDetail, archive, width }) => {
                 </Typography>
                 <Flex alignItems="center">
                     <Spacer space="xs">
-                        <Button
-                            size="small"
-                            variant="warning"
-                            mode="outline"
-                            onClick={() => archive(call.id)}
-                        >
-                            Archive
-                        </Button>
+                        {archive && (
+                            <Button
+                                size="small"
+                                variant="warning"
+                                mode="outline"
+                                onClick={() => archive(call.id)}
+                            >
+                                {call.is_archived ? 'Restore' : 'Archive'}
+                            </Button>
+                        )}
                         {goToDetail && (
                             <Button
                                 size="small"
