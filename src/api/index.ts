@@ -19,20 +19,16 @@ const request = async <Parameters, Response>(
     const response = await fetch(url, params);
     const shouldRefetchToken = response.status === 401;
 
-    if (!response.ok && url.indexOf(REFRESH_TOKEN_ENDPOINT) > -1) {
+    if (shouldRefetchToken && url.indexOf(REFRESH_TOKEN_ENDPOINT) > -1) {
         throw new Error(ERROR_NOT_LOGGED_MESSAGE, { cause: ERROR_NOT_LOGGED_CODE });
     }
 
     if (shouldRefetchToken && !refresh) {
-        try {
-            const { access_token, refresh_token } = await refreshToken();
+        const { access_token, refresh_token } = await refreshToken();
 
-            updateTokens(access_token, refresh_token)
+        updateTokens(access_token, refresh_token)
 
-            return await request(url, method, parameters, refresh);
-        } catch (e) {
-            throw new Error(ERROR_REFRESH_TOKEN_MESSAGE, { cause: ERROR_REFRESH_TOKEN_CODE });
-        }
+        return await request(url, method, parameters, refresh);
     }
 
     return await response.json() as Response;
