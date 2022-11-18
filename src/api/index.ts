@@ -1,5 +1,5 @@
 import { getAccessToken, getRefreshToken, updateTokens } from "../storage";
-import { API_URL, ARCHIVE_ENDPOINT, CALLS_ENDPOINT, ERROR_NOT_LOGGED_CODE, ERROR_NOT_LOGGED_MESSAGE, LOGIN_ENDPOINT, ME_ENDPOINT, PAGE_SIZE, REFRESH_TOKEN_ENDPOINT } from "./constants";
+import { API_URL, ARCHIVE_ENDPOINT, CALLS_ENDPOINT, ERRORS, ERROR_NOT_LOGGED_CODE, LOGIN_ENDPOINT, ME_ENDPOINT, PAGE_SIZE, REFRESH_TOKEN_ENDPOINT } from "./constants";
 import { Call, IAuthResponse, ICallsResponse, User } from "./types";
 
 const request = async <Parameters, Response>(
@@ -17,10 +17,10 @@ const request = async <Parameters, Response>(
     };
 
     const response = await fetch(url, params);
-    const shouldRefetchToken = response.status === 401;
+    const shouldRefetchToken = response.status === ERROR_NOT_LOGGED_CODE;
 
-    if (shouldRefetchToken && url.indexOf(REFRESH_TOKEN_ENDPOINT) > -1) {
-        throw new Error(ERROR_NOT_LOGGED_MESSAGE, { cause: ERROR_NOT_LOGGED_CODE });
+    if (!response.ok) {
+        await handleError(response);
     }
 
     if (shouldRefetchToken && !refresh) {
@@ -32,6 +32,16 @@ const request = async <Parameters, Response>(
     }
 
     return await response.json() as Response;
+}
+
+const handleError = async (response: Response) => {
+    const jsonResponse = await response.json()
+
+    if (response.status === ERROR_NOT_LOGGED_CODE && response.url.indexOf(REFRESH_TOKEN_ENDPOINT) > -1) {
+        throw new Error(ERRORS[response.status].message, { cause: response.status });
+    } else if (response.status !== ERROR_NOT_LOGGED_CODE) {
+        throw new Error(jsonResponse.message || ERRORS[response.status].message, { cause: response.status });
+    }
 }
 
 const getHeaders = (refresh?: boolean) => {

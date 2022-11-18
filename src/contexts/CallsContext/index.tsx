@@ -1,15 +1,15 @@
 import { FC, useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { createCtx } from '..';
 import { CHANNEL, UPDATE_CALL_EVENT } from '../../services/constants';
 import { getPusher } from '../../services/Pusher';
 import { useUserContext } from '../UserContext';
 import { getAccessToken } from '../../storage';
 import { archiveCall, getCalls } from '../../api';
-import { ERROR_NOT_LOGGED_CODE, PAGE_SIZE } from '../../api/constants';
+import { PAGE_SIZE } from '../../api/constants';
 import { Call } from '../../api/types';
 import { ICallsProvider, CallType, CallsDictionary } from './types';
 import { format } from 'date-fns';
+import useHandleError from '../../hooks/useHandleError';
 
 export const [useCallsContext, CallsContext] = createCtx<CallType>();
 
@@ -20,7 +20,7 @@ export const CallsProvider: FC<ICallsProvider> = ({ children }) => {
     const [totalCount, setTotalCount] = useState(0);
     const [loadingCalls, setLoadingCalls] = useState(false);
     const { loggedIn } = useUserContext();
-    const navigate = useNavigate();
+    const [handleError] = useHandleError();
 
     useEffect(() => {
         setLoadingCalls(true);
@@ -51,15 +51,11 @@ export const CallsProvider: FC<ICallsProvider> = ({ children }) => {
                 setLoadingCalls(false);
             } catch (error: unknown) {
                 setLoadingCalls(false);
-                if (
-                    error instanceof Error &&
-                    error?.cause === ERROR_NOT_LOGGED_CODE
-                )
-                    navigate('/login');
+                handleError(error);
             }
         };
         void fetchCalls();
-    }, [navigate, currentPage, pageSize]);
+    }, [currentPage, pageSize, handleError]);
 
     useEffect(() => {
         if (loggedIn) {
@@ -90,22 +86,26 @@ export const CallsProvider: FC<ICallsProvider> = ({ children }) => {
         }
     }, [loggedIn, calls]);
 
-    const changePage = (newPageNumber: number) => {
+    const changePage = useCallback((newPageNumber: number) => {
         setCurentPage(newPageNumber);
-    };
+    }, []);
 
-    const chagePageSize = (newPageSize: number) => {
+    const chagePageSize = useCallback((newPageSize: number) => {
         setPageSize(newPageSize);
-    };
+    }, []);
 
-    const archive = async (id: string): Promise<boolean> => {
-        try {
-            const result = await archiveCall(id);
-            return !!result;
-        } catch (e) {
-            return false;
-        }
-    };
+    const archive = useCallback(
+        async (id: string): Promise<boolean> => {
+            try {
+                const result = await archiveCall(id);
+                return !!result;
+            } catch (e) {
+                handleError(e);
+                return false;
+            }
+        },
+        [handleError]
+    );
 
     return (
         <CallsContext.Provider
@@ -115,15 +115,9 @@ export const CallsProvider: FC<ICallsProvider> = ({ children }) => {
                 pageSize,
                 totalCount,
                 loadingCalls,
-                changePage: useCallback(
-                    (newPageNumber) => changePage(newPageNumber),
-                    []
-                ),
-                chagePageSize: useCallback(
-                    (newPageSize) => chagePageSize(newPageSize),
-                    []
-                ),
-                archiveCall: useCallback((id) => archive(id), []),
+                changePage,
+                chagePageSize,
+                archiveCall: archive,
             }}
         >
             {children}
