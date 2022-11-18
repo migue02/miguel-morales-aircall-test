@@ -8,12 +8,13 @@ import { getAccessToken } from '../../storage';
 import { archiveCall, getCalls } from '../../api';
 import { ERROR_NOT_LOGGED_CODE, PAGE_SIZE } from '../../api/constants';
 import { Call } from '../../api/types';
-import { ICallsProvider, CallType } from './types';
+import { ICallsProvider, CallType, CallsDictionary } from './types';
+import { format } from 'date-fns';
 
 export const [useCallsContext, CallsContext] = createCtx<CallType>();
 
 export const CallsProvider: FC<ICallsProvider> = ({ children }) => {
-    const [calls, setCalls] = useState<Call[]>([]);
+    const [calls, setCalls] = useState<CallsDictionary>({});
     const [currentPage, setCurentPage] = useState(1);
     const [pageSize, setPageSize] = useState(PAGE_SIZE);
     const [totalCount, setTotalCount] = useState(0);
@@ -29,8 +30,24 @@ export const CallsProvider: FC<ICallsProvider> = ({ children }) => {
                     (currentPage - 1) * pageSize,
                     pageSize
                 );
+
+                const groupCalls: CallsDictionary = result.nodes.reduce(
+                    (groupCalls: CallsDictionary, call: Call) => {
+                        const date = format(
+                            new Date(call.created_at),
+                            'yyyy-M-dd'
+                        );
+                        if (!groupCalls[date]) {
+                            groupCalls[date] = [];
+                        }
+                        groupCalls[date].push(call);
+                        return groupCalls;
+                    },
+                    {}
+                );
+
                 setTotalCount(result.totalCount);
-                setCalls(result.nodes);
+                setCalls(groupCalls);
                 setLoadingCalls(false);
             } catch (error: unknown) {
                 setLoadingCalls(false);
@@ -49,19 +66,29 @@ export const CallsProvider: FC<ICallsProvider> = ({ children }) => {
             const channel = getPusher(getAccessToken()).subscribe(CHANNEL);
             channel.bind(UPDATE_CALL_EVENT, (data: Call) => {
                 if (data) {
-                    setCalls((oldCalls) => {
-                        return oldCalls.map((call) => {
-                            if (call.id === data.id) {
-                                call.is_archived = data.is_archived;
-                            }
-                            return call;
-                        });
-                    });
+                    const date = format(new Date(data.created_at), 'yyyy-M-dd');
+
+                    const groupCalls: CallsDictionary = Object.keys(
+                        calls
+                    ).reduce((groupCalls: CallsDictionary, key: string) => {
+                        groupCalls[key] = calls[key];
+                        if (date === key) {
+                            groupCalls[date].map((call) => {
+                                if (call.id === data.id) {
+                                    call.is_archived = data.is_archived;
+                                }
+                                return call;
+                            });
+                        }
+                        return groupCalls;
+                    }, {});
+
+                    setCalls(groupCalls);
                 }
             });
             return () => getPusher().unsubscribe(CHANNEL);
         }
-    }, [loggedIn]);
+    }, [loggedIn, calls]);
 
     const changePage = (newPageNumber: number) => {
         setCurentPage(newPageNumber);
