@@ -21,12 +21,7 @@ const CallComponent: FC<IProps> = ({ call, goToDetail, archive }) => {
             bg={call.is_archived ? 'grey.light' : 'white'}
             borderColor={getCallBorderColor(call.call_type)}
         >
-            <CallHeader
-                call={call}
-                width={getCallWidth()}
-                goToDetail={goToDetail}
-                archive={archive}
-            />
+            <CallHeader call={call} goToDetail={goToDetail} archive={archive} />
         </Flex>
     );
 };

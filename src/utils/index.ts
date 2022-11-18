@@ -25,7 +25,7 @@ export const getCallBorderColor = (type: CallType) => {
 
 export const getCallWidth = (offset?: number) => {
     return {
-        _: `${400 + (offset || 0)}px`,
+        _: `${350 + (offset || 0)}px`,
         md: `${600 + (offset || 0)}px`,
         xl: `${800 + (offset || 0)}px`,
     };

@@ -13,16 +13,11 @@ import { formatDate, formatTime } from '../../utils';
 
 interface IProps {
     call: Call;
-    width: {
-        _: string;
-        md: string;
-        xl: string;
-    };
     goToDetail?: (id: string) => void;
     archive?: (id: string) => void;
 }
 
-const CallHeader: FC<IProps> = ({ call, goToDetail, archive, width }) => {
+const CallHeader: FC<IProps> = ({ call, goToDetail, archive }) => {
     const [loadingArchive, setLoadingArchive] = useState(false);
     const onArchive = async () => {
         if (archive) {
@@ -36,7 +31,7 @@ const CallHeader: FC<IProps> = ({ call, goToDetail, archive, width }) => {
     };
 
     return (
-        <Spacer space="s" direction="vertical" width={width}>
+        <Spacer space="s" direction="vertical" width="100%">
             <Flex>
                 <Spacer space="xs">
                     <CallIcon
