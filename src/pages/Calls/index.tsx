@@ -1,14 +1,17 @@
 import {
+    Box,
+    Divider,
     Flex,
     Pagination,
     Skeleton,
     Spacer,
     Typography,
 } from '@aircall/tractor';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CallComponent from '../../components/CallComponent';
 import { useCallsContext } from '../../contexts/CallsContext';
-import { getCallWidth } from '../../utils';
+import { formatDate, getCallWidth } from '../../utils';
 
 const Calls = () => {
     const {
@@ -22,11 +25,20 @@ const Calls = () => {
         archiveCall,
     } = useCallsContext();
 
+    const [orderedCalls, setOrderedCalls] = useState<string[]>([]);
     const navigate = useNavigate();
 
     const goToDetail = (id: string) => {
         navigate(`/${id}`);
     };
+
+    useEffect(() => {
+        const callsDate = Object.keys(calls).sort(
+            (a, b) => new Date(b).getTime() - new Date(a).getTime()
+        );
+
+        setOrderedCalls(callsDate);
+    }, [calls]);
 
     return (
         <Flex height="90%" flexDirection="column" mt="40px">
@@ -46,14 +58,30 @@ const Calls = () => {
                     justifyContent="center"
                 >
                     {!loadingCalls ? (
-                        calls.map((call, idx) => (
-                            <CallComponent
-                                key={idx}
-                                call={call}
-                                goToDetail={goToDetail}
-                                archive={archiveCall}
-                            />
-                        ))
+                        orderedCalls.map((date) => {
+                            return (
+                                <Box key={date}>
+                                    <Typography variant="subheading">
+                                        {formatDate(date)}
+                                    </Typography>
+                                    <Spacer
+                                        space="xs"
+                                        width="100%"
+                                        direction="vertical"
+                                    >
+                                        <Divider orientation="horizontal" />
+                                    </Spacer>
+                                    {calls[date].map((call) => (
+                                        <CallComponent
+                                            key={call.id}
+                                            call={call}
+                                            goToDetail={goToDetail}
+                                            archive={archiveCall}
+                                        />
+                                    ))}
+                                </Box>
+                            );
+                        })
                     ) : (
                         <Spacer
                             space="s"
