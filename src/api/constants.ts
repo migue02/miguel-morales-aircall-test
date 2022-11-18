@@ -8,7 +8,6 @@ export const REFRESH_TOKEN_ENDPOINT = '/auth/refresh-token-v2';
 
 export const ARCHIVE_ENDPOINT = '/archive';
 
-
 export const ERROR_NOT_BAD_REQUEST_CODE = 400;
 export const ERROR_NOT_LOGGED_CODE = 401;
 export const ERROR_NOT_NOT_FOUND_CODE = 404;
