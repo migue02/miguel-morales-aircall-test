@@ -2,6 +2,9 @@ import { render, RenderOptions } from '@testing-library/react';
 import { Tractor } from '@aircall/tractor';
 import { Call } from './api/types';
 import { FC, ReactElement } from 'react';
+import { UserProvider } from './contexts/UserContext';
+import { CallsProvider } from './contexts/CallsContext';
+import { BrowserRouter } from 'react-router-dom';
 
 export const MockedOutboundCall: Call = {
     id: '123',
@@ -30,7 +33,15 @@ export const MockedInboundCall: Call = {
 };
 
 const AllTheProviders: FC<{ children: React.ReactNode }> = ({ children }) => {
-    return <Tractor injectStyle>{children}</Tractor>;
+    return (
+        <Tractor injectStyle>
+            <BrowserRouter>
+                <UserProvider>
+                    <CallsProvider>{children}</CallsProvider>
+                </UserProvider>
+            </BrowserRouter>
+        </Tractor>
+    );
 };
 
 const customRender = (
