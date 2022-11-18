@@ -5,9 +5,11 @@ import {
     FormItem,
     FormItemStatuses,
     Grid,
+    Icon,
+    SpinnerOutlined,
     TextFieldInput,
 } from '@aircall/tractor';
-import { SyntheticEvent, useState } from 'react';
+import { SyntheticEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../contexts/UserContext';
 
@@ -17,8 +19,14 @@ const Login = () => {
     const [validationStatus, setValidationStatus] =
         useState<FormItemStatuses>('success');
 
-    const { loading, login } = useUserContext();
+    const { loading, loggedIn, login } = useUserContext();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (loggedIn) {
+            navigate('/');
+        }
+    }, [loggedIn, navigate]);
 
     const onSubmit = async (e: SyntheticEvent) => {
         e.preventDefault();
@@ -46,7 +54,7 @@ const Login = () => {
                     gridRowGap={5}
                     gridTemplateColumns="1fr"
                 >
-                    <FormItem label="Email" name="email">
+                    <FormItem label="Username" name="username">
                         <TextFieldInput
                             value={username}
                             onChange={({ target }) => setUserName(target.value)}
@@ -54,7 +62,7 @@ const Login = () => {
                     </FormItem>
                     <FormItem
                         label="Password"
-                        name="email"
+                        name="password"
                         validationStatus={validationStatus}
                     >
                         <TextFieldInput
@@ -73,7 +81,11 @@ const Login = () => {
                                 password.length === 0
                             }
                         >
-                            Login
+                            {loading ? (
+                                <Icon component={SpinnerOutlined} spin />
+                            ) : (
+                                'Login'
+                            )}
                         </Button>
                     </FormItem>
                 </Grid>
