@@ -23,26 +23,28 @@ const renderLogin = () => {
     return { usernameInput, passwordInput, loginButton };
 };
 
-test('Login button is enabled when username and password are filled', async () => {
-    const { usernameInput, passwordInput, loginButton } = renderLogin();
+describe('<Login />', function () {
+    test('Login button is enabled when username and password are filled', async () => {
+        const { usernameInput, passwordInput, loginButton } = renderLogin();
 
-    expect(loginButton).toBeDisabled();
+        expect(loginButton).toBeDisabled();
 
-    userEvents.type(usernameInput, mockedUsername);
-    userEvents.type(passwordInput, mockedPassword);
+        userEvents.type(usernameInput, mockedUsername);
+        userEvents.type(passwordInput, mockedPassword);
 
-    expect(loginButton).toBeEnabled();
-});
+        expect(loginButton).toBeEnabled();
+    });
 
-test('Login button is loading is clicked', async () => {
-    const { usernameInput, passwordInput, loginButton } = renderLogin();
+    test('Login button is loading is clicked', async () => {
+        const { usernameInput, passwordInput, loginButton } = renderLogin();
 
-    userEvents.type(usernameInput, mockedUsername);
-    userEvents.type(passwordInput, mockedPassword);
+        userEvents.type(usernameInput, mockedUsername);
+        userEvents.type(passwordInput, mockedPassword);
 
-    expect(screen.getByText(/login/i)).toBeInTheDocument();
+        expect(screen.getByText(/login/i)).toBeInTheDocument();
 
-    userEvents.click(loginButton);
+        userEvents.click(loginButton);
 
-    expect(screen.queryByText(/login/i)).not.toBeInTheDocument();
+        expect(screen.queryByText(/login/i)).not.toBeInTheDocument();
+    });
 });
