@@ -24,13 +24,15 @@ interface IProps {
 
 const CallHeader: FC<IProps> = ({ call, goToDetail, archive, width }) => {
     const [loadingArchive, setLoadingArchive] = useState(false);
-
     const onArchive = async () => {
-        setLoadingArchive(true);
         if (archive) {
-            await archive(call.id);
+            setLoadingArchive(true);
+            try {
+                await archive(call.id);
+            } finally {
+                setLoadingArchive(false);
+            }
         }
-        setLoadingArchive(false);
     };
 
     return (

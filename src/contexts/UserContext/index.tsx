@@ -2,6 +2,7 @@ import { FC, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createCtx } from '..';
 import { isLogged, login, refreshToken } from '../../api';
+import useHandleError from '../../hooks/useHandleError';
 import { IUserProvider, UserType } from './types';
 
 export const [useUserContext, UserContext] = createCtx<UserType>();
@@ -11,6 +12,7 @@ export const UserProvider: FC<IUserProvider> = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [loggedIn, setLoggedIn] = useState(false);
     const navigate = useNavigate();
+    const [handleError] = useHandleError();
 
     useEffect(() => {
         const fetchIsLogged = async () => {
@@ -20,14 +22,14 @@ export const UserProvider: FC<IUserProvider> = ({ children }) => {
                 if (!logged) {
                     navigate('/login');
                 }
-            } catch (e) {
+            } catch (error) {
                 setLoggedIn(false);
-                navigate('/login');
+                handleError(error);
             }
         };
 
         void fetchIsLogged();
-    }, [navigate]);
+    }, [navigate, handleError]);
 
     const doLogin = async (
         username: string,
