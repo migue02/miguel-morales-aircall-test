@@ -64,7 +64,15 @@ const Login = () => {
                         />
                     </FormItem>
                     <FormItem>
-                        <Button type="submit" block disabled={loading}>
+                        <Button
+                            type="submit"
+                            block
+                            disabled={
+                                loading ||
+                                username.length === 0 ||
+                                password.length === 0
+                            }
+                        >
                             Login
                         </Button>
                     </FormItem>

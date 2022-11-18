@@ -1,10 +1,10 @@
-import { Button, Divider, Flex, Skeleton, Spacer } from '@aircall/tractor';
+import { Button, Flex, Skeleton, Spacer } from '@aircall/tractor';
 import { FC } from 'react';
 import { getCallBorderColor, getCallWidth } from '../../utils';
 import { useNavigate, useParams } from 'react-router-dom';
 import CallHeader from '../../components/CallHeader';
-import CallNotes from '../../components/CallNotes';
 import useCall from '../../hooks/useCall';
+import CallBody from '../../components/CallBody';
 
 interface ICallDetail {
     id?: string;
@@ -35,17 +35,12 @@ const CallDetail: FC<ICallDetail> = ({ id }) => {
             flexDirection="column"
             borderColor={getCallBorderColor(call.call_type)}
         >
-            <Spacer space="s" direction="vertical">
+            <Spacer space="s" direction="vertical" width="100%">
                 <Button mode="link" onClick={() => goBack()}>
                     Go Back
                 </Button>
-                <CallHeader call={call} width={getCallWidth(-64)} />
-                {call.notes.length > 0 && (
-                    <Spacer space="s" width="100%" direction="vertical">
-                        <Divider orientation="horizontal" />
-                        <CallNotes notes={call.notes} />
-                    </Spacer>
-                )}
+                <CallHeader call={call} />
+                <CallBody call={call} />
             </Spacer>
         </Flex>
     );

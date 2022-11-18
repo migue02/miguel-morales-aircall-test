@@ -1,24 +1,37 @@
-import { Button, Flex, Spacer, Typography } from '@aircall/tractor';
-import { FC } from 'react';
+import {
+    Button,
+    Flex,
+    Icon,
+    Spacer,
+    SpinnerOutlined,
+    Typography,
+} from '@aircall/tractor';
+import { FC, useState } from 'react';
 import { Call } from '../../api/types';
-import { formatRelative } from 'date-fns';
 import CallIcon from '../CallIcon';
-import { formatTime } from '../../utils';
+import { formatDate, formatTime } from '../../utils';
 
 interface IProps {
     call: Call;
-    width: {
-        _: string;
-        md: string;
-        xl: string;
-    };
     goToDetail?: (id: string) => void;
     archive?: (id: string) => void;
 }
 
-const CallHeader: FC<IProps> = ({ call, goToDetail, archive, width }) => {
+const CallHeader: FC<IProps> = ({ call, goToDetail, archive }) => {
+    const [loadingArchive, setLoadingArchive] = useState(false);
+    const onArchive = async () => {
+        if (archive) {
+            setLoadingArchive(true);
+            try {
+                await archive(call.id);
+            } finally {
+                setLoadingArchive(false);
+            }
+        }
+    };
+
     return (
-        <Spacer space="s" direction="vertical" width={width}>
+        <Spacer space="s" direction="vertical" width="100%">
             <Flex>
                 <Spacer space="xs">
                     <CallIcon
@@ -36,7 +49,7 @@ const CallHeader: FC<IProps> = ({ call, goToDetail, archive, width }) => {
             </Flex>
             <Flex alignItems="center" justifyContent="flex-end">
                 <Typography variant="body2" flexGrow="1">
-                    {formatRelative(new Date(call.created_at), new Date())}
+                    {formatDate(call.created_at)}
                 </Typography>
                 <Flex alignItems="center">
                     <Spacer space="xs">
@@ -45,9 +58,16 @@ const CallHeader: FC<IProps> = ({ call, goToDetail, archive, width }) => {
                                 size="small"
                                 variant="warning"
                                 mode="outline"
-                                onClick={() => archive(call.id)}
+                                onClick={onArchive}
+                                readOnly={loadingArchive}
                             >
-                                {call.is_archived ? 'Restore' : 'Archive'}
+                                {loadingArchive ? (
+                                    <Icon component={SpinnerOutlined} spin />
+                                ) : call.is_archived ? (
+                                    'Restore'
+                                ) : (
+                                    'Archive'
+                                )}
                             </Button>
                         )}
                         {goToDetail && (

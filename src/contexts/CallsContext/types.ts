@@ -1,14 +1,16 @@
 import { ReactNode } from "react";
 import { Call } from "../../api/types";
 
+export type CallsDictionary = { [key: string]: Call[] };
+
 export type CallType = {
-    calls: Call[];
+    calls: CallsDictionary;
     currentPage: number;
-    changePage: (newPageSize: number) => void;
     pageSize: number;
-    chagePageSize: (newPageNumber: number) => void;
     totalCount: number;
     loadingCalls: boolean;
+    changePage: (newPageSize: number) => void;
+    chagePageSize: (newPageNumber: number) => void;
     archiveCall: (id: string) => Promise<boolean>;
 };
 
