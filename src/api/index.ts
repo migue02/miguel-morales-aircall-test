@@ -70,8 +70,8 @@ const handleError = async (response: Response) => {
     }
 };
 
-const getHeaders = (refresh?: boolean) => {
-    const authToken = refresh ? getRefreshToken() : getAccessToken();
+const getHeaders = (fromRefresh?: boolean) => {
+    const authToken = fromRefresh ? getRefreshToken() : getAccessToken();
 
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
