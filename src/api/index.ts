@@ -35,12 +35,14 @@ const request = async <Parameters, Response>(
 }
 
 const handleError = async (response: Response) => {
-    const jsonResponse = await response.json()
+    if (response.status) {
+        const jsonResponse = await response.json()
 
-    if (response.status === ERROR_NOT_LOGGED_CODE && response.url.indexOf(REFRESH_TOKEN_ENDPOINT) > -1) {
-        throw new Error(ERRORS[response.status].message, { cause: response.status });
-    } else if (response.status !== ERROR_NOT_LOGGED_CODE) {
-        throw new Error(jsonResponse.message || ERRORS[response.status].message, { cause: response.status });
+        if (response.status === ERROR_NOT_LOGGED_CODE && response.url.indexOf(REFRESH_TOKEN_ENDPOINT) > -1) {
+            throw new Error(ERRORS[response.status].message, { cause: response.status });
+        } else if (response.status !== ERROR_NOT_LOGGED_CODE) {
+            throw new Error(jsonResponse.message || ERRORS[response.status].message, { cause: response.status });
+        }
     }
 }
 
