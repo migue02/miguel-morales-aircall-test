@@ -48,7 +48,7 @@ export const mockCallsFetch = (mockData: Call | Call[]) => {
     ) as jest.Mock;
 };
 
-export const mockFetchError = (error: any) => {
+export const mockFetchError = (error: unknown) => {
     global.fetch = jest.fn().mockImplementation(() => Promise.reject(error));
 };
 
