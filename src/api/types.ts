@@ -1,4 +1,9 @@
 export type User = {
+    id: string;
+    username: string;
+}
+
+export type UserRequest = {
     username: string;
     password: string;
 }
@@ -42,5 +47,3 @@ export type IAuthResponse = {
     access_token: string;
     refresh_token: string;
 }
-
-export type IAllResponses = IAuthResponse | ICallsResponse;

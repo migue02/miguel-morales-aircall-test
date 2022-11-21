@@ -1,6 +1,6 @@
-import { getAccessToken, getRefreshToken, updateTokens } from "../storage";
+import { clearItems, getAccessToken, getRefreshToken, setUser, updateTokens } from "../storage";
 import { API_URL, ARCHIVE_ENDPOINT, CALLS_ENDPOINT, ERRORS, ERROR_NOT_LOGGED_CODE, LOGIN_ENDPOINT, ME_ENDPOINT, PAGE_SIZE, REFRESH_TOKEN_ENDPOINT } from "./constants";
-import { Call, IAuthResponse, ICallsResponse, User } from "./types";
+import { Call, IAuthResponse, ICallsResponse, UserRequest } from "./types";
 
 const request = async <Parameters, Response>(
     url: string,
@@ -77,9 +77,11 @@ export const isLogged = async (): Promise<boolean> => {
 }
 
 export const login = async (username: string, password: string): Promise<IAuthResponse> => {
-    const response = await post<User, IAuthResponse>(`${API_URL}${LOGIN_ENDPOINT}`, { username, password });
-    const { access_token, refresh_token } = response;
-    updateTokens(access_token, refresh_token)
+    const response = await post<UserRequest, IAuthResponse>(`${API_URL}${LOGIN_ENDPOINT}`, { username, password });
+    const { access_token, refresh_token, user } = response;
+    clearItems();
+    updateTokens(access_token, refresh_token);
+    setUser(user);
 
     return response;
 }
