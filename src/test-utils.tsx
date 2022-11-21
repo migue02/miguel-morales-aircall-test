@@ -32,6 +32,26 @@ export const MockedInboundCall: Call = {
     notes: [],
 };
 
+export const mockCallFetch = (mockData: Call) => {
+    global.fetch = jest.fn().mockImplementation(() =>
+        Promise.resolve({
+            json: () => Promise.resolve(mockData),
+        })
+    ) as jest.Mock;
+};
+
+export const mockCallsFetch = (mockData: Call | Call[]) => {
+    global.fetch = jest.fn().mockImplementation(() =>
+        Promise.resolve({
+            json: () => Promise.resolve({ nodes: mockData }),
+        })
+    ) as jest.Mock;
+};
+
+export const mockFetchError = (error: any) => {
+    global.fetch = jest.fn().mockImplementation(() => Promise.reject(error));
+};
+
 const AllTheProviders: FC<{ children: React.ReactNode }> = ({ children }) => {
     return (
         <Tractor injectStyle>

@@ -33,11 +33,13 @@ const Calls = () => {
     };
 
     useEffect(() => {
-        const callsDate = Object.keys(calls).sort(
-            (a, b) => new Date(b).getTime() - new Date(a).getTime()
-        );
+        if (calls) {
+            const callsDate = Object.keys(calls).sort(
+                (a, b) => new Date(b).getTime() - new Date(a).getTime()
+            );
 
-        setOrderedCalls(callsDate);
+            setOrderedCalls(callsDate);
+        }
     }, [calls]);
 
     return (
