@@ -12,7 +12,7 @@
 -   It renders:
     -   CallHeader but wraps it in a flex component with extra styles to be used in the Calls page
 
-### [CallHeader]https://github.com/migue02/miguel-morales-aircall-test/tree/main/src/components/CallHeader)
+### [CallHeader](https://github.com/migue02/miguel-morales-aircall-test/tree/main/src/components/CallHeader)
 
 -   It receives:
     -   call: _Call_
