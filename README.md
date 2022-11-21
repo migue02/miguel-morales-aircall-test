@@ -42,3 +42,15 @@ In the next section I will describe each context, custom hooks, pages, component
 ## [Storage](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/storage)
 
 ## [Services](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/services)
+
+## Todo
+
+-   Create more tests.
+-   Think about more edge cases.
+-   Add comments to the code (use the README.md files).
+-   Refactor to use some localisation library.
+-   Change pusher code to be able to modify the Authorization header without recreating the pusher object (not found how to do it in the docs).
+-   Add more features:
+    -   Be able to archive more than one call in a row
+    -   Add notes to the calls
+    -   Add filters for the calls list
