@@ -38,51 +38,51 @@ Context created to handle user information and useful functions:
 
 ```json
 {
-	2022-11-16: [
-		{
-			"id":"dd3dca23-7a79-4b2e-a139-c7e6c1e5a599",
-			"duration":859,
-			"is_archived":false,
-			"from":"+33172762342",
-			"to":"+33115101456",
-			"direction":"inbound",
-			"call_type":"missed",
-			"via":"+33167541097",
-			"created_at":"2022-11-16T23:59:07.500Z",
-			"notes":[]
-		},
-	],
-	2022-11-18: [
-		{
-			"id":"dd3dca23-7a79-4b2e-a139-c7e6c1e5a588",
-			"duration":85,
-			"is_archived":true,
-			"from":"+33175762342",
-			"to":"+33115171456",
-			"direction":"inbound",
-			"call_type":"voicemail",
-			"via":"+33167543097",
-			"created_at":"2022-11-18T23:59:07.500Z",
-			"notes":[]
-		},
-		{
-			"id":"dd3dca23-7a79-4b2e-a139-c7e6c1e5a577",
-			"duration":59,
-			"is_archived":false,
-			"from":"+33172768342",
-			"to":"+33115101446",
-			"direction":"outbound",
-			"call_type":"answered",
-			"via":"+33167541096",
-			"created_at":"2022-11-18T20:59:07.500Z",
-			"notes":[
-				{
-					"id":"6c875652-f460-446b-837d-6a5e446c6efd",
-					"content":"Ea qui sit voluptatem odit modi."
-				}
-			]
-		},
-	]
+    "2022-11-16": [
+        {
+            "id": "dd3dca23-7a79-4b2e-a139-c7e6c1e5a599",
+            "duration": 859,
+            "is_archived": false,
+            "from": "+33172762342",
+            "to": "+33115101456",
+            "direction": "inbound",
+            "call_type": "missed",
+            "via": "+33167541097",
+            "created_at": "2022-11-16T23:59:07.500Z",
+            "notes": []
+        }
+    ],
+    "2022-11-18": [
+        {
+            "id": "dd3dca23-7a79-4b2e-a139-c7e6c1e5a588",
+            "duration": 85,
+            "is_archived": true,
+            "from": "+33175762342",
+            "to": "+33115171456",
+            "direction": "inbound",
+            "call_type": "voicemail",
+            "via": "+33167543097",
+            "created_at": "2022-11-18T23:59:07.500Z",
+            "notes": []
+        },
+        {
+            "id": "dd3dca23-7a79-4b2e-a139-c7e6c1e5a577",
+            "duration": 59,
+            "is_archived": false,
+            "from": "+33172768342",
+            "to": "+33115101446",
+            "direction": "outbound",
+            "call_type": "answered",
+            "via": "+33167541096",
+            "created_at": "2022-11-18T20:59:07.500Z",
+            "notes": [
+                {
+                    "id": "6c875652-f460-446b-837d-6a5e446c6efd",
+                    "content": "Ea qui sit voluptatem odit modi."
+                }
+            ]
+        }
+    ]
 }
 ```
 
