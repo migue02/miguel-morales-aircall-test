@@ -22,13 +22,13 @@ const request = async <Parameters, Response>(
     url: string,
     method: 'GET' | 'POST' | 'PUT',
     parameters?: Parameters,
-    refresh?: boolean
+    fromRefresh?: boolean
 ): Promise<Response> => {
     const body = parameters && JSON.stringify(parameters);
 
     const params: RequestInit = {
         method,
-        headers: getHeaders(refresh),
+        headers: getHeaders(fromRefresh),
         body,
     };
 
@@ -39,12 +39,12 @@ const request = async <Parameters, Response>(
         await handleError(response);
     }
 
-    if (shouldRefetchToken && !refresh) {
+    if (shouldRefetchToken && !fromRefresh) {
         const { access_token, refresh_token } = await refreshToken();
 
         updateTokens(access_token, refresh_token);
 
-        return await request(url, method, parameters, refresh);
+        return await request(url, method, parameters, fromRefresh);
     }
 
     return (await response.json()) as Response;
