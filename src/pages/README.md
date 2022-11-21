@@ -1,6 +1,6 @@
 ## Pages
 
-### Login
+### [Login](https://github.com/migue02/miguel-morales-aircall-test/tree/main/src/pages/Login)
 
 It renders the login page of the app. This page has:
 
@@ -16,7 +16,7 @@ It renders the login page of the app. This page has:
     -   Know if the login is successful
     -   Know if the login action is happening
 
-### Calls
+### [Calls](https://github.com/migue02/miguel-morales-aircall-test/tree/main/src/pages/Calls)
 
 It renders the login page of the app. This page has:
 
@@ -48,7 +48,7 @@ It renders the login page of the app. This page has:
         -   totalCount
     -   Archive/restore calls
 
-### CallDetail
+### [CallDetail](https://github.com/migue02/miguel-morales-aircall-test/tree/main/src/pages/CallDetail)
 
 It renders the login page of the app. This page has:
 
