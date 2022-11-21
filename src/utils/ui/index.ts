@@ -1,4 +1,4 @@
-import { CallType } from "../../api/types";
+import { CallType } from '../../api/types';
 
 export const getCallBorderColor = (type: CallType) => {
     if (type === 'missed') {

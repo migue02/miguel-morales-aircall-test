@@ -1,46 +1,44 @@
-# Getting Started with Create React App
+# Aircall Test
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Used environment
 
-## Available Scripts
+-   react 17.0.2
+-   react-scripts 5.0.1
+-   node v16.17.1
+-   yarn 1.22.19
+-   typescript 4.8.4
 
-In the project directory, you can run:
+## How to start the app
 
-### `npm start`
+-   **Install dependencies**: npm install
+-   **Run the app**: npm run start
+-   **Run tests**: npm run test
+-   **Run linter**: npm run lint
+-   **Run formatter**: npm run format
+-   **Run type checker**: npm run typecheck
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Introduction:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+This test is about (re) building a small part of Aircall’s main application in which I've used:
 
-### `npm test`
+-   React
+-   [Tractor 🚜](http://tractor.aircall.io/) as Design System
+-   Typescript
+-   React testing library and Jest
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The app is built without using any external library lo handle the app state, I've used a mix of contexts and custom hooks in order to handle the state.
+In the next section I will describe each context, custom hooks, pages, components and api implementation I've used.
 
-### `npm run build`
+## [Contexts](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/contexts/Contexts.md)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## [Hooks](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/hooks/Hooks.md)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## [Pages](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/pages/Pages.md)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## [Components](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/components/Components.md)
 
-### `npm run eject`
+## [API](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/api/Api.md)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## [Storage](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/storage/Storage.md)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## [Services](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/services/Services.md)

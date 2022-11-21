@@ -12,6 +12,6 @@ jest.mock('react-router-dom', () => ({
 }));
 
 jest.mock('@aircall/tractor', () => ({
-    ...jest.requireActual('@aircall/tractor') as any,
+    ...(jest.requireActual('@aircall/tractor') as any),
     useToast: () => mockedFn,
 }));

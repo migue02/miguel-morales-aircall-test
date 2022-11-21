@@ -25,7 +25,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!@aircall/tractor)/\" --detectOpenHandles",
     "eject": "react-scripts eject",
-    "lint": "eslint src/**/*.tsx src/**/*.ts"
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
+    "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --quiet",
+    "typecheck": "tsc --noEmit"
   },
   "eslintConfig": {
     "extends": [

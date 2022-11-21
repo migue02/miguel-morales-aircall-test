@@ -10,10 +10,10 @@ export const getPusher = (token?: string | null) => {
             channelAuthorization: {
                 transport: 'ajax',
                 endpoint: APP_AUTH_ENDPOINT,
-                headers: { Authorization: `Bearer ${token}`, },
+                headers: { Authorization: `Bearer ${token}` },
             },
         });
     }
 
     return pusher;
-}
+};

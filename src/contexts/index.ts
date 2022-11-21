@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext } from 'react';
 
 /**
  * A helper to create a Context and Provider with no upfront default value, and
@@ -13,4 +13,4 @@ export const createCtx = <A extends {} | null>() => {
         return c;
     }
     return [useCtx, ctx] as const;
-}
+};
