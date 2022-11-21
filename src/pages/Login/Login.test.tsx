@@ -35,7 +35,7 @@ describe('<Login />', function () {
         expect(loginButton).toBeEnabled();
     });
 
-    test('Login button is loading is clicked', async () => {
+    test('Login button is loading when is clicked', async () => {
         const { usernameInput, passwordInput, loginButton } = renderLogin();
 
         userEvents.type(usernameInput, mockedUsername);

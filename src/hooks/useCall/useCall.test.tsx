@@ -7,14 +7,16 @@ import { renderHook } from '@testing-library/react-hooks';
 import useCall from '.';
 import { MockedInboundCall, mockCallFetch } from '../../test-utils';
 
-test('Returns call when id is passed', async () => {
-    mockCallFetch(MockedInboundCall);
-    const { result, waitForNextUpdate } = renderHook(() => useCall('123'));
+describe('useCall tests', function () {
+    test('Returns call when id is passed', async () => {
+        mockCallFetch(MockedInboundCall);
+        const { result, waitForNextUpdate } = renderHook(() => useCall('123'));
 
-    expect(result.current[1]).toBe(true);
+        expect(result.current[1]).toBe(true);
 
-    await waitForNextUpdate();
+        await waitForNextUpdate();
 
-    expect(result.current[1]).toBe(false);
-    expect(result.current[0]).toMatchObject(MockedInboundCall);
+        expect(result.current[1]).toBe(false);
+        expect(result.current[0]).toMatchObject(MockedInboundCall);
+    });
 });
