@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
-import { Call } from "../../api/types";
+import { ReactNode } from 'react';
+import { Call } from '../../api/types';
 
 export type CallsDictionary = { [key: string]: Call[] };
 

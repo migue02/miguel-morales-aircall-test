@@ -22,12 +22,11 @@ export default function useCall(id?: string) {
                 setLoading(false);
                 handleError(error);
             }
-        }
+        };
         if (id) {
             void fetchCall(id);
         }
     }, [id, handleError]);
-
 
     return [call, loading] as [Call, boolean];
 }

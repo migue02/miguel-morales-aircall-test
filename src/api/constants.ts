@@ -22,6 +22,6 @@ export const ERRORS: { [key: number]: { message: string } } = {
     404: {
         message: 'Not Found',
     },
-}
+};
 
 export const PAGE_SIZE = 10;
