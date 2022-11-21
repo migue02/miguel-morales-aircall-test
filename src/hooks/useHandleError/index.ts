@@ -1,7 +1,11 @@
 import { useToast } from '@aircall/tractor';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ERRORS, ERROR_NOT_LOGGED_CODE } from '../../api/constants';
+import {
+    ERRORS,
+    ERROR_NOT_LOGGED_CODE,
+    ERROR_NOT_NOT_FOUND_CODE,
+} from '../../api/constants';
 import { clearItems } from '../../storage';
 
 export default function useHandleError() {
@@ -23,6 +27,9 @@ export default function useHandleError() {
                 if (code === ERROR_NOT_LOGGED_CODE) {
                     clearItems();
                     navigate('/login');
+                } else if (code === ERROR_NOT_NOT_FOUND_CODE) {
+                    navigate('/');
+                    displayError(error.message);
                 } else if (code && !!ERRORS[code] && error.message) {
                     displayError(error.message);
                 } else {
