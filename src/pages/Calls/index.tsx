@@ -63,23 +63,20 @@ const Calls = () => {
                         orderedCalls.map((date) => {
                             return (
                                 <Box key={date}>
-                                    <Typography variant="subheading">
+                                    <Typography variant="heading">
                                         {formatDate(date)}
                                     </Typography>
-                                    <Spacer
-                                        space="xs"
-                                        width="100%"
-                                        direction="vertical"
-                                    >
+                                    <Box width="100%" pr={3} mt={10}>
                                         <Divider orientation="horizontal" />
-                                    </Spacer>
+                                    </Box>
                                     {calls[date].map((call) => (
-                                        <CallComponent
-                                            key={call.id}
-                                            call={call}
-                                            goToDetail={goToDetail}
-                                            archive={archiveCall}
-                                        />
+                                        <Box key={call.id} mr={3}>
+                                            <CallComponent
+                                                call={call}
+                                                goToDetail={goToDetail}
+                                                archive={archiveCall}
+                                            />
+                                        </Box>
                                     ))}
                                 </Box>
                             );

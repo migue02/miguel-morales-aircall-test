@@ -37,7 +37,7 @@ const CallDetail: FC<ICallDetail> = ({ id }) => {
         >
             <Spacer space="s" direction="vertical" width="100%">
                 <Button mode="link" onClick={() => goBack()}>
-                    Go Back
+                    {`< Back`}
                 </Button>
                 <CallHeader call={call} />
                 <CallBody call={call} />

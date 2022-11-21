@@ -9,7 +9,7 @@ import {
 import { FC, useState } from 'react';
 import { Call } from '../../api/types';
 import CallIcon from '../CallIcon';
-import { formatDate, formatTime } from '../../utils';
+import { formatSecondsInTime, formatTime } from '../../utils';
 
 interface IProps {
     call: Call;
@@ -37,19 +37,19 @@ const CallHeader: FC<IProps> = ({ call, goToDetail, archive }) => {
                     <CallIcon
                         icon={call.is_archived ? 'archive' : call.call_type}
                     />
-                    <Typography variant="heading">
+                    <Typography variant="subheading">
                         {call.direction === 'inbound' ? call.from : call.to}
                     </Typography>
                 </Spacer>
                 <Spacer space="xs" fluid justifyContent="flex-end">
                     <Typography ml="auto">
-                        {formatTime(call.duration)}
+                        {formatSecondsInTime(call.duration)}
                     </Typography>
                 </Spacer>
             </Flex>
             <Flex alignItems="center" justifyContent="flex-end">
                 <Typography variant="body2" flexGrow="1">
-                    {formatDate(call.created_at)}
+                    {formatTime(call.created_at)}
                 </Typography>
                 <Flex alignItems="center">
                     <Spacer space="xs">
