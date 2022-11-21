@@ -29,16 +29,16 @@ This test is about (re) building a small part of Aircall’s main application in
 The app is built without using any external library lo handle the app state, I've used a mix of contexts and custom hooks in order to handle the state.
 In the next section I will describe each context, custom hooks, pages, components and api implementation I've used.
 
-## [Contexts](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/contexts/Readme.md)
+## [Contexts](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/contexts)
 
-## [Hooks](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/hooks/Readme.md)
+## [Hooks](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/hooks)
 
-## [Pages](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/pages/Readme.md)
+## [Pages](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/pages)
 
-## [Components](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/components/Readme.md)
+## [Components](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/components)
 
-## [API](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/api/Readme.md)
+## [API](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/api)
 
-## [Storage](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/storage/Readme.md)
+## [Storage](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/storage)
 
-## [Services](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/services/Readme.md)
+## [Services](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/services)
