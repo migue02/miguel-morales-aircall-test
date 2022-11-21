@@ -33,4 +33,6 @@ In the next section I will describe each context, custom hooks, pages, component
 
 ## [Hooks](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/hooks/Hooks.md)
 
-## [Pages](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/hooks/Pages.md)
+## [Pages](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/pages/Pages.md)
+
+## [Components](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/components/Components.md)
