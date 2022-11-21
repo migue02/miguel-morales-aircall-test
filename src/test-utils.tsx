@@ -1,6 +1,6 @@
 import { render, RenderOptions } from '@testing-library/react';
 import { Tractor } from '@aircall/tractor';
-import { Call } from './api/types';
+import { Call, IAuthResponse } from './api/types';
 import { FC, ReactElement } from 'react';
 import { UserProvider } from './contexts/UserContext';
 import { CallsProvider } from './contexts/CallsContext';
@@ -32,7 +32,16 @@ export const MockedInboundCall: Call = {
     notes: [],
 };
 
-export const mockCallFetch = (mockData: Call) => {
+export const mockedUsername = 'miguel@mail.com';
+export const mockedPassword = 'miguel123';
+
+export const LoginMockData: IAuthResponse = {
+    access_token: 'access_token',
+    refresh_token: 'refresh_token',
+    user: { id: '123', username: mockedUsername },
+};
+
+export const mockFetch = <T,>(mockData: T) => {
     global.fetch = jest.fn().mockImplementation(() =>
         Promise.resolve({
             json: () => Promise.resolve(mockData),
@@ -40,16 +49,15 @@ export const mockCallFetch = (mockData: Call) => {
     ) as jest.Mock;
 };
 
-export const mockCallsFetch = (mockData: Call | Call[]) => {
-    global.fetch = jest.fn().mockImplementation(() =>
-        Promise.resolve({
-            json: () => Promise.resolve({ nodes: mockData }),
-        })
-    ) as jest.Mock;
-};
-
 export const mockFetchError = (error: unknown) => {
     global.fetch = jest.fn().mockImplementation(() => Promise.reject(error));
+};
+
+export const spyOnSetItemLocalStorage = () => {
+    jest.spyOn(Storage.prototype, 'setItem');
+    jest.spyOn(Storage.prototype, 'removeItem');
+    Storage.prototype.removeItem = jest.fn();
+    Storage.prototype.setItem = jest.fn();
 };
 
 const AllTheProviders: FC<{ children: React.ReactNode }> = ({ children }) => {

@@ -1,6 +1,14 @@
+import { User } from "../api/types";
+
 const USER = 'user';
 const ACCESS_TOKEN = 'access_token';
 const REFRESH_TOKEN = 'refresh_token';
+
+export const clearItems = () => {
+    localStorage.removeItem(ACCESS_TOKEN);
+    localStorage.removeItem(REFRESH_TOKEN);
+    localStorage.removeItem(USER);
+}
 
 export const updateTokens = (accessToken: string, refreshToken: string) => {
     setAccessToken(accessToken);
@@ -23,10 +31,14 @@ export const setRefreshToken = (refreshToken: string) => {
     return localStorage.setItem(REFRESH_TOKEN, refreshToken);
 }
 
-export const setUser = (username: string) => {
-    return localStorage.setItem(USER, username);
+export const setUser = (user: User) => {
+    return localStorage.setItem(USER, JSON.stringify(user));
 }
 
-export const getUser = () => {
-    return localStorage.getItem(USER);
+export const getUser = (): User | null => {
+    const stringUser = localStorage.getItem(USER);
+    if (stringUser) {
+        return JSON.parse(stringUser) as User;
+    }
+    return null;
 }

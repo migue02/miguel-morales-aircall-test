@@ -28,12 +28,11 @@ const Login = () => {
         }
     }, [loggedIn, navigate]);
 
-    const onSubmit = async (e: SyntheticEvent) => {
+    const onSubmit = (e: SyntheticEvent) => {
         e.preventDefault();
 
         try {
-            await login(username, password);
-            navigate('/');
+            login(username, password);
         } catch (error) {
             setValidationStatus('error');
         }
