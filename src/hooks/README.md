@@ -30,7 +30,10 @@ It returns an array of 1 length of a Call and a boolean:
             -   If error.cause is **ERROR_NOT_LOGGED_CODE**
                 -   Clear all items in the localStorage related to the user
                 -   Navigate to the login page
-            -   If the error is **ERROR_NOT_BAD_REQUEST_CODE** or **ERROR_NOT_NOT_FOUND_CODE**
+            -   If error.cause is **ERROR_NOT_NOT_FOUND_CODE**
+                -   Display the error message using a Toast
+                -   Navigate to the home page
+            -   If the error is **ERROR_NOT_BAD_REQUEST_CODE**
                 -   Display the error message using a Toast
 
 #### How to use it
