@@ -54,3 +54,4 @@ In the next section I will describe each context, custom hooks, pages, component
     -   Be able to archive more than one call in a row
     -   Add notes to the calls
     -   Add filters for the calls list
+-   Add CI/CD
