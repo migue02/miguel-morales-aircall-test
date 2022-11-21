@@ -5,11 +5,11 @@
 import { expect, test } from '@jest/globals';
 import { renderHook } from '@testing-library/react-hooks';
 import useCall from '.';
-import { MockedInboundCall, mockCallFetch } from '../../test-utils';
+import { MockedInboundCall, mockFetch } from '../../test-utils';
 
 describe('useCall tests', function () {
     test('Returns call when id is passed', async () => {
-        mockCallFetch(MockedInboundCall);
+        mockFetch(MockedInboundCall);
         const { result, waitForNextUpdate } = renderHook(() => useCall('123'));
 
         expect(result.current[1]).toBe(true);
