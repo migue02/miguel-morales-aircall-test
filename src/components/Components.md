@@ -1,6 +1,6 @@
-### Components
+## Components
 
-#### CallComponent
+### CallComponent
 
 -   It receives:
     -   call: _Call_
@@ -12,7 +12,7 @@
 -   It renders:
     -   CallHeader but wraps it in a flex component with extra styles to be used in the Calls page
 
-#### CallHeader
+### CallHeader
 
 -   It receives:
     -   call: _Call_
@@ -35,7 +35,7 @@
         -   Detail
             -   It will navigate to the CallDetail page (**/:id**)
 
-#### CallBody
+### CallBody
 
 -   It receives:
     -   call: _Call_
@@ -46,7 +46,7 @@
     -   "Call done to" + number (for inbound calls)
     -   Call notes
 
-#### CallIcon
+### CallIcon
 
 -   It receives:
     -   icon: _CallType | CallDirection | 'archive'_
@@ -59,7 +59,7 @@
     -   icon === 'outbound' => `<OutboundOutlined />`
     -   icon === 'archive' => `<ArchiveFilled />`
 
-#### CallNotes
+### CallNotes
 
 -   It receives:
     -   notes: _Note[]_

@@ -36,3 +36,9 @@ In the next section I will describe each context, custom hooks, pages, component
 ## [Pages](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/pages/Pages.md)
 
 ## [Components](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/components/Components.md)
+
+## [API](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/api/Api.md)
+
+## [Storage](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/storage/Storage.md)
+
+## [Services](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/services/Services.md)
