@@ -30,3 +30,5 @@ The app is built without using any external library lo handle the app state, I'v
 In the next section I will describe each context, custom hooks, pages, components and api implementation I've used.
 
 ## [Contexts](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/contexts/Contexts.md)
+
+## [Hooks](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/hooks/Hooks.md)

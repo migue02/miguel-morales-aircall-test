@@ -12,7 +12,7 @@ interface ICallDetail {
 
 const CallDetail: FC<ICallDetail> = ({ id }) => {
     const navigate = useNavigate();
-    const [call] = useCall(id);
+    const [call] = useCall(id || '');
 
     const getHeight = () => 600;
 

@@ -3,7 +3,7 @@ import { getCall } from '../../api';
 import { Call } from '../../api/types';
 import useHandleError from '../useHandleError';
 
-export default function useCall(id?: string) {
+export default function useCall(id: string) {
     const [call, setCall] = useState<Call>();
     const [loading, setLoading] = useState(false);
     const [handleError] = useHandleError();
