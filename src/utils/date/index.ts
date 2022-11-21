@@ -8,8 +8,6 @@ export const formatSecondsInTime = (timeInSeconds: number) => {
 
 export const formatTime = (date: string) => {
     const dateAsDate = new Date(date);
-    console.log({ dateAsDate });
-
 
     return format(dateAsDate, 'p');
 }

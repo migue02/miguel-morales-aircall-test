@@ -64,22 +64,15 @@ export const CallsProvider: FC<ICallsProvider> = ({ children }) => {
                 if (data) {
                     const date = format(new Date(data.created_at), 'yyyy-M-dd');
 
-                    const groupCalls: CallsDictionary = Object.keys(
-                        calls
-                    ).reduce((groupCalls: CallsDictionary, key: string) => {
-                        groupCalls[key] = calls[key];
-                        if (date === key) {
-                            groupCalls[date].map((call) => {
-                                if (call.id === data.id) {
-                                    call.is_archived = data.is_archived;
-                                }
-                                return call;
-                            });
-                        }
-                        return groupCalls;
-                    }, {});
-
-                    setCalls(groupCalls);
+                    setCalls({
+                        ...calls,
+                        [date]: calls[date].map((call) => {
+                            if (call.id === data.id) {
+                                call.is_archived = data.is_archived;
+                            }
+                            return call;
+                        }),
+                    });
                 }
             });
             return () => getPusher().unsubscribe(CHANNEL);
