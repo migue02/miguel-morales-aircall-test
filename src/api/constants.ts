@@ -7,6 +7,7 @@ export const LOGIN_ENDPOINT = '/auth/login';
 export const REFRESH_TOKEN_ENDPOINT = '/auth/refresh-token-v2';
 
 export const ARCHIVE_ENDPOINT = '/archive';
+export const ADD_NOTE_ENDPOINT = '/note';
 
 export const ERROR_NOT_BAD_REQUEST_CODE = 400;
 export const ERROR_NOT_LOGGED_CODE = 401;

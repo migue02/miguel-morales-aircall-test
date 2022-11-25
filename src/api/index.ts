@@ -6,6 +6,7 @@ import {
     updateTokens,
 } from '../storage';
 import {
+    ADD_NOTE_ENDPOINT,
     API_URL,
     ARCHIVE_ENDPOINT,
     CALLS_ENDPOINT,
@@ -16,7 +17,13 @@ import {
     PAGE_SIZE,
     REFRESH_TOKEN_ENDPOINT,
 } from './constants';
-import { Call, IAuthResponse, ICallsResponse, UserRequest } from './types';
+import {
+    AddNoteRequest,
+    Call,
+    IAuthResponse,
+    ICallsResponse,
+    UserRequest,
+} from './types';
 
 const request = async <Parameters, Response>(
     url: string,
@@ -148,4 +155,14 @@ export const getCall = async (id: string): Promise<Call> => {
 
 export const archiveCall = async (id: string): Promise<Call> => {
     return put<Call>(`${API_URL}${CALLS_ENDPOINT}/${id}${ARCHIVE_ENDPOINT}`);
+};
+
+export const addNoteToCall = async (
+    id: string,
+    content: string
+): Promise<Call> => {
+    return post<AddNoteRequest, Call>(
+        `${API_URL}${CALLS_ENDPOINT}/${id}${ADD_NOTE_ENDPOINT}`,
+        { content }
+    );
 };

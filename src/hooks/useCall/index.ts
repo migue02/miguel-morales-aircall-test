@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getCall } from '../../api';
+import { addNoteToCall, getCall } from '../../api';
 import { Call } from '../../api/types';
 import useHandleError from '../useHandleError';
 
@@ -28,5 +28,23 @@ export default function useCall(id: string) {
         }
     }, [id, handleError]);
 
-    return [call, loading] as [Call, boolean];
+    const addNote = async (content: string): Promise<boolean> => {
+        setLoading(true);
+        try {
+            const call = await addNoteToCall(id, content);
+            setCall(call);
+            return true;
+        } catch (error) {
+            handleError(error);
+            return false;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return [call, addNote, loading] as [
+        Call,
+        (content: string) => Promise<boolean>,
+        boolean
+    ];
 }

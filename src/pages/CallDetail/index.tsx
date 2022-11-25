@@ -10,9 +10,9 @@ interface ICallDetail {
     id?: string;
 }
 
-const CallDetail: FC<ICallDetail> = ({ id }) => {
+const CallDetail: FC<ICallDetail> = ({ id = '' }) => {
     const navigate = useNavigate();
-    const [call] = useCall(id || '');
+    const [call, addNote] = useCall(id);
 
     const getHeight = () => 600;
 
@@ -40,7 +40,7 @@ const CallDetail: FC<ICallDetail> = ({ id }) => {
                     {`< Back`}
                 </Button>
                 <CallHeader call={call} />
-                <CallBody call={call} />
+                <CallBody call={call} onAddNote={addNote} />
             </Spacer>
         </Flex>
     );

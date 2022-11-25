@@ -8,6 +8,10 @@ export type UserRequest = {
     password: string;
 };
 
+export type AddNoteRequest = {
+    content: string;
+};
+
 export type Note = {
     id: string;
     content: string;
