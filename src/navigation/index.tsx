@@ -10,13 +10,18 @@ const Navigation = () => {
     return (
         <BrowserRouter>
             <UserProvider>
-                <CallsProvider>
-                    <Routes>
-                        <Route path={HOME} element={<Calls />} />
-                        <Route path={CALL_DETAIL} element={<CallDetail />} />
-                        <Route path={LOGIN} element={<Login />} />
-                    </Routes>
-                </CallsProvider>
+                <Routes>
+                    <Route
+                        path={HOME}
+                        element={
+                            <CallsProvider>
+                                <Calls />
+                            </CallsProvider>
+                        }
+                    />
+                    <Route path={CALL_DETAIL} element={<CallDetail />} />
+                    <Route path={LOGIN} element={<Login />} />
+                </Routes>
             </UserProvider>
         </BrowserRouter>
     );

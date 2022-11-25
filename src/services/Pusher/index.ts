@@ -5,7 +5,6 @@ let pusher: Pusher;
 let accessToken: string | null | undefined;
 
 export const getPusher = (token?: string | null) => {
-    accessToken = token;
     if (!pusher || token !== accessToken) {
         pusher = new Pusher(APP_KEY, {
             cluster: APP_CLUSTER,
@@ -17,5 +16,6 @@ export const getPusher = (token?: string | null) => {
         });
     }
 
+    accessToken = token;
     return pusher;
 };
