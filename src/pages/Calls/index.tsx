@@ -7,7 +7,7 @@ import {
     Spacer,
     Typography,
 } from '@aircall/tractor';
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CallComponent from '../../components/CallComponent';
 import { useCallsContext } from '../../contexts/CallsContext';
@@ -25,22 +25,19 @@ const Calls = () => {
         archiveCall,
     } = useCallsContext();
 
-    const [orderedCalls, setOrderedCalls] = useState<string[]>([]);
+    const orderedCalls = useMemo(() => {
+        if (calls) {
+            return Object.keys(calls).sort(
+                (a, b) => new Date(b).getTime() - new Date(a).getTime()
+            );
+        }
+    }, [calls]);
+
     const navigate = useNavigate();
 
     const goToDetail = (id: string) => {
         navigate(`/${id}`);
     };
-
-    useEffect(() => {
-        if (calls) {
-            const callsDate = Object.keys(calls).sort(
-                (a, b) => new Date(b).getTime() - new Date(a).getTime()
-            );
-
-            setOrderedCalls(callsDate);
-        }
-    }, [calls]);
 
     return (
         <Flex height="90%" flexDirection="column" mt="40px">
@@ -59,7 +56,7 @@ const Calls = () => {
                     alignItems="center"
                     justifyContent="center"
                 >
-                    {!loadingCalls ? (
+                    {!loadingCalls && orderedCalls ? (
                         orderedCalls.map((date) => {
                             return (
                                 <Box key={date}>
