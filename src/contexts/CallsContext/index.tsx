@@ -1,85 +1,79 @@
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { createCtx } from '..';
 import { CHANNEL, UPDATE_CALL_EVENT } from '../../services/constants';
 import { getPusher } from '../../services/Pusher';
 import { useUserContext } from '../UserContext';
 import { getAccessToken } from '../../storage';
-import { archiveCall, getCalls } from '../../api';
+import { getCalls } from '../../api';
 import { PAGE_SIZE } from '../../api/constants';
-import { Call } from '../../api/types';
+import { Call, ICallsResponse } from '../../api/types';
 import { ICallsProvider, CallType, CallsDictionary } from './types';
 import { format } from 'date-fns';
 import useHandleError from '../../hooks/useHandleError';
+import { useArchiveMutation } from '../../hooks/useArchiveMutation';
 
 export const [useCallsContext, CallsContext] = createCtx<CallType>();
 
 export const CallsProvider: FC<ICallsProvider> = ({ children }) => {
-    const [calls, setCalls] = useState<CallsDictionary>({});
+    const queryClient = useQueryClient();
     const [currentPage, setCurentPage] = useState(1);
     const [pageSize, setPageSize] = useState(PAGE_SIZE);
-    const [totalCount, setTotalCount] = useState(0);
-    const [loadingCalls, setLoadingCalls] = useState(false);
     const { loggedIn } = useUserContext();
     const [handleError] = useHandleError();
+    const archiveMutation = useArchiveMutation(currentPage, pageSize);
 
-    useEffect(() => {
-        setLoadingCalls(true);
-        const fetchCalls = async () => {
-            try {
-                const result = await getCalls(
-                    (currentPage - 1) * pageSize,
-                    pageSize
-                );
+    const { data: dataQuery, isLoading: loadingCalls } = useQuery<
+        ICallsResponse,
+        Error
+    >({
+        queryKey: ['calls', (currentPage - 1) * pageSize, pageSize],
+        queryFn: () => getCalls((currentPage - 1) * pageSize, pageSize),
+        onError: (error) => handleError(error),
+    });
 
-                const groupCalls: CallsDictionary = result.nodes.reduce(
-                    (groupCalls: CallsDictionary, call: Call) => {
-                        const date = format(
-                            new Date(call.created_at),
-                            'yyyy-M-dd'
-                        );
-                        if (!groupCalls[date]) {
-                            groupCalls[date] = [];
-                        }
-                        groupCalls[date].push(call);
-                        return groupCalls;
-                    },
-                    {}
-                );
+    const { calls = {}, totalCount = 0 } = useMemo(() => {
+        if (dataQuery && !loadingCalls) {
+            const groupCalls: CallsDictionary = dataQuery.nodes.reduce(
+                (groupCalls: CallsDictionary, call: Call) => {
+                    const date = format(new Date(call.created_at), 'yyyy-M-dd');
+                    if (!groupCalls[date]) {
+                        groupCalls[date] = [];
+                    }
+                    groupCalls[date].push(call);
+                    return groupCalls;
+                },
+                {}
+            );
+            return { calls: groupCalls, totalCount: dataQuery.totalCount };
+        }
+        return {};
+    }, [dataQuery, loadingCalls]);
 
-                setTotalCount(result.totalCount);
-                setCalls(groupCalls);
-                setLoadingCalls(false);
-            } catch (error: unknown) {
-                setLoadingCalls(false);
-                handleError(error);
-            }
-        };
-        void fetchCalls();
-    }, [currentPage, pageSize, handleError]);
+    const archive = useCallback(
+        (id: string) => {
+            archiveMutation.mutate(id);
+        },
+        [archiveMutation]
+    );
 
     useEffect(() => {
         if (loggedIn) {
             const channel = getPusher(getAccessToken()).subscribe(CHANNEL);
             channel.bind(UPDATE_CALL_EVENT, (data: Call) => {
                 if (data) {
-                    const date = format(new Date(data.created_at), 'yyyy-M-dd');
-
-                    if (calls[date]) {
-                        setCalls({
-                            ...calls,
-                            [date]: calls[date].map((call) => {
-                                if (call.id === data.id) {
-                                    call.is_archived = data.is_archived;
-                                }
-                                return call;
-                            }),
-                        });
-                    }
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            'calls',
+                            (currentPage - 1) * pageSize,
+                            pageSize,
+                        ],
+                    });
                 }
             });
             return () => getPusher().unsubscribe(CHANNEL);
         }
-    }, [loggedIn, calls]);
+    }, [loggedIn, queryClient, currentPage, pageSize]);
 
     const changePage = useCallback((newPageNumber: number) => {
         setCurentPage(newPageNumber);
@@ -89,26 +83,13 @@ export const CallsProvider: FC<ICallsProvider> = ({ children }) => {
         setPageSize(newPageSize);
     }, []);
 
-    const archive = useCallback(
-        async (id: string): Promise<boolean> => {
-            try {
-                const result = await archiveCall(id);
-                return !!result;
-            } catch (e) {
-                handleError(e);
-                return false;
-            }
-        },
-        [handleError]
-    );
-
     return (
         <CallsContext.Provider
             value={{
                 calls,
+                totalCount,
                 currentPage,
                 pageSize,
-                totalCount,
                 loadingCalls,
                 changePage,
                 chagePageSize,

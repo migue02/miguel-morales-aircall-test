@@ -1,12 +1,5 @@
-import {
-    Button,
-    Flex,
-    Icon,
-    Spacer,
-    SpinnerOutlined,
-    Typography,
-} from '@aircall/tractor';
-import { FC, useState } from 'react';
+import { Button, Flex, Spacer, Typography } from '@aircall/tractor';
+import { FC } from 'react';
 import { Call } from '../../api/types';
 import CallIcon from '../CallIcon';
 import { formatSecondsInTime, formatTime } from '../../utils';
@@ -18,16 +11,8 @@ interface IProps {
 }
 
 const CallHeader: FC<IProps> = ({ call, goToDetail, archive }) => {
-    const [loadingArchive, setLoadingArchive] = useState(false);
     const onArchive = async () => {
-        if (archive) {
-            setLoadingArchive(true);
-            try {
-                await archive(call.id);
-            } finally {
-                setLoadingArchive(false);
-            }
-        }
+        archive?.(call.id);
     };
 
     return (
@@ -59,15 +44,8 @@ const CallHeader: FC<IProps> = ({ call, goToDetail, archive }) => {
                                 variant="warning"
                                 mode="outline"
                                 onClick={onArchive}
-                                readOnly={loadingArchive}
                             >
-                                {loadingArchive ? (
-                                    <Icon component={SpinnerOutlined} spin />
-                                ) : call.is_archived ? (
-                                    'Restore'
-                                ) : (
-                                    'Archive'
-                                )}
+                                {call.is_archived ? 'Restore' : 'Archive'}
                             </Button>
                         )}
                         {goToDetail && (
