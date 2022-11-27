@@ -1,9 +1,9 @@
 import { ReactNode } from 'react';
-import { Call } from '../../api/types';
+import { Call, CallType } from '../../api/types';
 
 export type CallsDictionary = { [key: string]: Call[] };
 
-export type CallType = {
+export type CallsType = {
     calls: CallsDictionary;
     currentPage: number;
     pageSize: number;
@@ -12,6 +12,7 @@ export type CallType = {
     changePage: (newPageSize: number) => void;
     chagePageSize: (newPageNumber: number) => void;
     archiveCall: (id: string) => void;
+    setFilter: React.Dispatch<React.SetStateAction<CallType | undefined>>;
 };
 
 export interface ICallsProvider {
