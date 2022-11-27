@@ -52,12 +52,15 @@ export const useArchiveMutation = (currentPage: number, pageSize: number) => {
             handleError(error);
         },
         // Always refetch after error or success:
-        onSettled: () => {
+        onSettled: (data) => {
             queryClient.invalidateQueries([
                 'calls',
                 (currentPage - 1) * pageSize,
                 pageSize,
             ]);
+            if (data?.id) {
+                queryClient.invalidateQueries(['call', data.id]);
+            }
         },
     });
     return archiveMutation;

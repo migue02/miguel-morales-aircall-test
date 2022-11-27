@@ -2,7 +2,7 @@
 
 ### [useCall](https://github.com/migue02/miguel-morales-aircall-test/tree/main/src/hooks/useCall)
 
-Hook to be able to get a call from the backend by its call id.
+Hook to be able to get a call from the backend by its call id. It uses ReactQuery to have a better behaviour.
 It returns a duple of a Call and a boolean:
 
 -   **call**: _undefined | Call_
@@ -48,3 +48,32 @@ try {
     handleError(error);
 }
 ```
+
+### [useArchiveMutation](https://github.com/migue02/miguel-morales-aircall-test/tree/main/src/hooks/useArchiveMutation)
+
+Hook to be able achive a call by using useMutation from ReactQuery.
+
+-   Needs two parameters to be able to use and invalidate the proper query:
+
+    -   currentPage: _number_
+    -   pageSize: _number_
+
+It does an optimistic update by following these steps:
+
+-   Call `archiveCall` from the api
+-   In the `onMutate` callback
+    -   Cancel any outgoing refetches (so they don't overwrite our optimistic update)
+    -   Snapshot the previous calls
+    -   Optimistically update the calls array with switching `is_archived` prop for the selected call
+    -   Return the previous calls
+-   In the `onSettled` callback
+    -   Invalidate the query which has this call in it
+-   In the `onError` callback
+    -   Use the context with the previous calls returned from onMutate to roll back
+
+It returns a function which needs the call id.
+
+#### How to use it
+
+`const archiveMutation = useArchiveMutation(currentPage, pageSize);`
+`archiveMutation(id)`

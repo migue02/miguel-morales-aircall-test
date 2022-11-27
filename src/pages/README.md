@@ -23,6 +23,7 @@ It renders the login page of the app. This page has:
 -   Path: _/_
 -   List of calls
     -   Title
+    -   Filter ('missed', 'voicemail', 'answered', undefined = show all calls)
     -   List of calls organised per date, showing:
         -   Icon for the type (missed, answered, voicemail or archived)
         -   Depending on the call direction (_inbound_|_outbound_) shows from or to phone number
@@ -39,7 +40,7 @@ It renders the login page of the app. This page has:
         -   Current page
         -   First and last page
 -   It uses `useCallsContext` from **CallsContext** to:
-    -   Get the calls list
+    -   Get the filtered calls list
         -   After getting the calls list it orders it by using the date of the calls from most recent to oldest
     -   Know if the getting calls action is happening
     -   Paginate the calls by using:

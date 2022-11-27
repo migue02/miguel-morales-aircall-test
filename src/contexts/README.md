@@ -35,6 +35,9 @@ Context created to handle user information and useful functions:
     -   The data structure of this dictionary is this one:
         -   {[date as string]: array of calls}
         -   Example:
+    -   Could be filtered by using the filter state
+
+It uses ReactQuery in order to improve the way of loading calls and also archiving calls by using optimistic update.
 
 ```json
 {
@@ -103,10 +106,12 @@ Context created to handle user information and useful functions:
     -   Triggers a new calls request using the new page size
 -   **archiveCall**: _function_
     -   Archive a call with a given id call
+-   **setFilter**: _function_
+    -   Update the filter. It accepts ('missed', 'voicemail', 'answered', undefined = show all calls)
 
 #### How to use it
 
 1. You will have to wrap your app using **CallsProvider** where you want to use **CallsContext**
 2. In order to actually use it this is how you need to call it:
-    - `const { loadingCalls, calls, currentPage, pageSize, totalCount, changePage, chagePageSize, archiveCall } = useCallsContext();`
+    - `const { loadingCalls, calls, currentPage, pageSize, totalCount, changePage, chagePageSize, archiveCall, setFilter } = useCallsContext();`
     - Example: [link](https://github.com/migue02/miguel-morales-aircall-test/blob/main/src/pages/Calls/index.tsx#L17)
