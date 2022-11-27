@@ -31,33 +31,33 @@ export const UserProvider: FC<IUserProvider> = ({ children }) => {
         void fetchIsLogged();
     }, [navigate, handleError]);
 
-    const doLogin = async (
-        username: string,
-        password: string
-    ): Promise<boolean> => {
-        setLoading(true);
-        try {
-            await login(username, password);
-            setUserName(username);
-            setLoggedIn(true);
-            return true;
-        } catch (error) {
-            setUserName('');
-            setLoggedIn(false);
-            return false;
-        } finally {
-            setLoading(false);
-        }
-    };
+    const doLogin = useCallback(
+        async (username: string, password: string): Promise<boolean> => {
+            setLoading(true);
+            try {
+                await login(username, password);
+                setUserName(username);
+                setLoggedIn(true);
+                return true;
+            } catch (error) {
+                setUserName('');
+                setLoggedIn(false);
+                return false;
+            } finally {
+                setLoading(false);
+            }
+        },
+        []
+    );
 
-    const doRefreshToken = async () => {
+    const doRefreshToken = useCallback(async () => {
         setLoading(true);
         try {
             await refreshToken(false);
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
     return (
         <UserContext.Provider
@@ -65,11 +65,8 @@ export const UserProvider: FC<IUserProvider> = ({ children }) => {
                 username,
                 loggedIn,
                 loading,
-                login: useCallback(
-                    (username, password) => doLogin(username, password),
-                    []
-                ),
-                refreshToken: useCallback(() => doRefreshToken(), []),
+                login: doLogin,
+                refreshToken: doRefreshToken,
             }}
         >
             {children}
