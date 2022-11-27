@@ -7,18 +7,19 @@ import { useUserContext } from '../UserContext';
 import { getAccessToken } from '../../storage';
 import { getCalls } from '../../api';
 import { PAGE_SIZE } from '../../api/constants';
-import { Call, ICallsResponse } from '../../api/types';
-import { ICallsProvider, CallType, CallsDictionary } from './types';
+import { Call, CallType, ICallsResponse } from '../../api/types';
+import { ICallsProvider, CallsType, CallsDictionary } from './types';
 import { format } from 'date-fns';
 import useHandleError from '../../hooks/useHandleError';
 import { useArchiveMutation } from '../../hooks/useArchiveMutation';
 
-export const [useCallsContext, CallsContext] = createCtx<CallType>();
+export const [useCallsContext, CallsContext] = createCtx<CallsType>();
 
 export const CallsProvider: FC<ICallsProvider> = ({ children }) => {
     const queryClient = useQueryClient();
     const [currentPage, setCurentPage] = useState(1);
     const [pageSize, setPageSize] = useState(PAGE_SIZE);
+    const [filter, setFilter] = useState<CallType>();
     const { loggedIn } = useUserContext();
     const [handleError] = useHandleError();
     const archiveMutation = useArchiveMutation(currentPage, pageSize);
@@ -36,11 +37,16 @@ export const CallsProvider: FC<ICallsProvider> = ({ children }) => {
         if (dataQuery && !loadingCalls) {
             const groupCalls: CallsDictionary = dataQuery.nodes.reduce(
                 (groupCalls: CallsDictionary, call: Call) => {
-                    const date = format(new Date(call.created_at), 'yyyy-M-dd');
-                    if (!groupCalls[date]) {
-                        groupCalls[date] = [];
+                    if (!filter || call.call_type === filter) {
+                        const date = format(
+                            new Date(call.created_at),
+                            'yyyy-M-dd'
+                        );
+                        if (!groupCalls[date]) {
+                            groupCalls[date] = [];
+                        }
+                        groupCalls[date].push(call);
                     }
-                    groupCalls[date].push(call);
                     return groupCalls;
                 },
                 {}
@@ -48,7 +54,7 @@ export const CallsProvider: FC<ICallsProvider> = ({ children }) => {
             return { calls: groupCalls, totalCount: dataQuery.totalCount };
         }
         return {};
-    }, [dataQuery, loadingCalls]);
+    }, [dataQuery, loadingCalls, filter]);
 
     const archive = useCallback(
         (id: string) => {
@@ -81,6 +87,7 @@ export const CallsProvider: FC<ICallsProvider> = ({ children }) => {
 
     const chagePageSize = useCallback((newPageSize: number) => {
         setPageSize(newPageSize);
+        setCurentPage(1); // Go to the first page just in case the page size is too big and there's not engough pages
     }, []);
 
     return (
@@ -94,6 +101,7 @@ export const CallsProvider: FC<ICallsProvider> = ({ children }) => {
                 changePage,
                 chagePageSize,
                 archiveCall: archive,
+                setFilter,
             }}
         >
             {children}
